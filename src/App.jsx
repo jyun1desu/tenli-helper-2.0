@@ -1,21 +1,21 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import Navigator from '@/components/navigator/Navigator.jsx';
+import Header from '@/components/header/Header.jsx';
 import { Box } from '@chakra-ui/react';
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const [currentPage, setCurrentPage] = useState('home');
   return (
     <Box fontWeight="500" color="content.primary" width="100dvw" height="100dvh" bg="white">
       <Box bg="bg.primary" display="flex" flexDirection="column" width="100%" height="100%">
         <Box flex="0 0 auto">
-          header
+          <Header currentPage={currentPage} />
         </Box>
-        <Box flex="1 1 auto" overflowY="auto">
+        <Box flex="1 1 auto" overflowY="auto" p="5">
           <Box>content</Box>
         </Box>
         <Box flex="0 0 auto">
-          <Navigator />
+          <Navigator currentPage={currentPage} setCurrentPage={setCurrentPage} />
         </Box>
       </Box>
     </Box>

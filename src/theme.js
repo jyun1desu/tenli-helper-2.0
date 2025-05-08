@@ -9,8 +9,8 @@ const customConfig = defineConfig({
         },
         content: {
           primary: "#222222",
-          secondary: "#555555",
-          tertiary: "#d5d5d5",
+          secondary: "#444444",
+          tertiary: "#b8b6b6",
           highlight: "#4eb56b",
         },
         icon: {

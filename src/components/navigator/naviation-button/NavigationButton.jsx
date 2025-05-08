@@ -9,13 +9,14 @@ const NavigationButton = ({
 }) => {
     return (
         <Button
+            flex="1 1 0"
             data-label={label}
             display="flex"
             flexDirection="column"
             bg="transparent"
             height="auto"
             color={isSelected ? "content.highlight" : "content.tertiary"}
-            transform={isSelected ? 'scale(1.05)' : ''}
+            transform={isSelected ? 'scale(1.1)' : ''}
             onClick={() => {
                 onClick(label)
             }}

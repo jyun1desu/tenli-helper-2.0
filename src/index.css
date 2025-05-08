@@ -23,3 +23,14 @@ body {
   align-items: center;
   justify-content: center;
 }
+
+h1,
+h2,
+h3,
+h4,
+p,
+span {
+  font-family: "M PLUS Rounded 1c", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  line-height: 1.5;
+}
