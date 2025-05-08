@@ -1,21 +1,27 @@
 import { Button, Icon, Text } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React from "react";
 
 const NavigationButton = ({
     icon: IconComponent,
     label,
+    isSelected,
+    onClick,
 }) => {
-    const [isHover, setIsHover] = useState(false);
     return (
         <Button
-            bg="white"
-            onClick={()=>setIsHover(pre=>!pre)}
-            borderRadius="100px"
-            aspectRatio={isHover ? "unser" : "1 / 1"}
+            data-label={label}
+            display="flex"
+            flexDirection="column"
+            bg="transparent"
+            height="auto"
+            color={isSelected ? "content.highlight" : "content.tertiary"}
+            transform={isSelected ? 'scale(1.05)' : ''}
+            onClick={() => {
+                onClick(label)
+            }}
         >
-            <Icon as={IconComponent} stroke="icon.pink" color="pink" />
-            {/* <Icon stroke="green" /> */}
-            {isHover ? <Text color="content.secondary" letterSpacing="1.5px">{label}</Text> : null}
+            <Icon size="lg" as={IconComponent} />
+            <Text textStyle="lg" letterSpacing="1.5px">{label}</Text>
         </Button>
     )
 };

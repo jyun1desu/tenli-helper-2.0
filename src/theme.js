@@ -5,15 +5,24 @@ const customConfig = defineConfig({
     tokens: {
       colors: {
         bg: {
-            primary: "#f4f4f4",
+            primary: "#f6efef",
         },
         content: {
           primary: "#222222",
-          secondary: "#4eb56b",
+          secondary: "#555555",
+          tertiary: "#d5d5d5",
+          highlight: "#4eb56b",
         },
         icon: {
           primary: "#ffc0cb",
         },
+      },
+      space: { 
+        xs: '4px',
+        s: '8px',
+        m: '12px',
+        l: '16px',
+        xl: '20px',
       },
     },
   },
