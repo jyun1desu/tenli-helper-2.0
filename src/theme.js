@@ -9,15 +9,17 @@ const customConfig = defineConfig({
             secondary: "#7dcc94",
             tertiary: "#fdc088",
             highlight: "#faf3d8",
+            pink: "#fcc6c6",
         },
         content: {
           primary: "#4f4f4f",
-          secondary: "#444444",
+          secondary: "#696969",
           tertiary: "#b8b6b6",
           highlight: "#4eb56b",
         },
         icon: {
           primary: "#f6d0cc",
+          secondary: "#dadada",
           star: "#fddf6c",
         },
         border: {

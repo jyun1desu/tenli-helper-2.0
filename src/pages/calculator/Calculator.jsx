@@ -1,47 +1,14 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Box, Button, Checkbox, Icon, Text } from '@chakra-ui/react';
-import ItemList, { LAYOUT } from '../../components/item-list/ItemList.jsx';
 import PVIcon from '@/assets/diamond.svg?react';
-import StarIcon from '@/assets/star.svg?react';
 import ReceiptIcon from '@/assets/receipt-check.svg?react';
 import GiftIcon from '@/assets/gift.svg?react';
-import MagicWandIcon from '@/assets/magic-wand.svg?react';
 import GridIcon from '@/assets/grid.svg?react';
 import ListIcon from '@/assets/list.svg?react';
+import GiftInfoSummary from '@/components/giftInfoSummary/GiftInfoSummary.jsx';
+import ItemList, { LAYOUT } from '@/components/item-list/ItemList.jsx';
+import formatNumber from '@/utils/formatNumber.js';
 import { TEST_GIFT_LIST, TEST_ITEM_LIST } from './test.js';
-
-
-
-const formatNumber = (value, withCurrency = true) => {
-    return `${withCurrency ? '$' : ''}${value.toLocaleString()}`;
-}
-
-const getGiftData = (giftList, points) => {
-    const sortedGifts = giftList.sort((a, b) => a.threshold - b.threshold);
-
-    let currentGift = undefined;
-    let nextGift = undefined;
-
-    for (let i = 0; i < sortedGifts.length; i++) {
-        const gift = sortedGifts[i];
-
-        if (points >= gift.threshold) {
-            currentGift = gift;
-        } else {
-            nextGift = gift;
-            break;
-        }
-    }
-
-    const pointsToNext = nextGift ? nextGift.threshold - points : 0;
-
-    return {
-        gift: currentGift ? currentGift.label : undefined,
-        nextGift: nextGift ? nextGift.label : undefined,
-        nextGiftProgress: nextGift ? (points / nextGift.threshold) * 100 : 100,
-        pointsToNext,
-    };
-}
 
 const HighlightText = ({ children }) => {
     return (
@@ -50,7 +17,6 @@ const HighlightText = ({ children }) => {
 }
 
 const Calculator = ({ total = 25800, points = 2000, itemList = TEST_ITEM_LIST, giftList = TEST_GIFT_LIST }) => {
-    const { gift, nextGift, pointsToNext, nextGiftProgress } = getGiftData(giftList, points);
     const [currentFilter, setCurrentFilter] = useState('');
     const [layout, setLayout] = useState(LAYOUT.LIST);
     const [isGiftAreaVisible, setIsGiftAreaVisible] = useState(false);
@@ -68,7 +34,6 @@ const Calculator = ({ total = 25800, points = 2000, itemList = TEST_ITEM_LIST, g
 
         return filters;
     }, [itemList]);
-
 
     const displayList = useMemo(() => {
         if (currentFilter) {
@@ -194,7 +159,8 @@ const Calculator = ({ total = 25800, points = 2000, itemList = TEST_ITEM_LIST, g
                     borderStyle="dashed"
                     borderColor="border.primary"
                     mt="2"
-                    py="3"
+                    pt="2"
+                    pb="3"
                     px="4"
                     bg="white"
                 >
@@ -212,24 +178,7 @@ const Calculator = ({ total = 25800, points = 2000, itemList = TEST_ITEM_LIST, g
                     >
                         <Icon as={GiftIcon} size="md" color="white" />
                     </Box>
-                    <Text letterSpacing="1px" textStyle="lg" mb="2" whiteSpace="pre-line" lineHeight={1.2}>
-                        {gift && (
-                            <>
-                                目前贈品 <HighlightText>{gift}</HighlightText>
-                            </>
-                        )}
-                        {nextGift && (
-                            <>
-                               ，再 <Text as="b">{pointsToNext}PV</Text> 可獲得 <HighlightText as="b">{nextGift}</HighlightText>
-                            </>
-                        )}
-                    </Text>
-                    <Box display="flex" alignItems="center">
-                        <Box width="100%" height="12px" bg="#f0f0f0" borderRadius="8px">
-                            <Box width={`${nextGiftProgress}%`} height="12px" bg="bg.tertiary" borderRadius="8px" />
-                        </Box>
-                        {!nextGift ? <Icon as={StarIcon} color="icon.star" ml="1" /> : ''}
-                    </Box>
+                    <GiftInfoSummary giftList={giftList} currentPV={points}/>
                 </Box>
             </Box>
         </Box>

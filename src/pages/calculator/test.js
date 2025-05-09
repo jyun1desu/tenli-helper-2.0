@@ -366,15 +366,42 @@ export const TEST_GIFT_LIST = [
     id: 1,
     threshold: 1000,
     label: "瑪利歐賽車",
+    price: 5000,
   },
   {
     id: 2,
     threshold: 5000,
     label: "皮克敏 3+4 超值組",
+    price: 7000,
   },
   {
     id: 3,
     threshold: 8000,
     label: "任天堂 Switch2 大禮包",
+    price: 15000,
+  },
+  {
+    id: 4,
+    threshold: 16000,
+    label: "Fujifilm XT-50 大相機",
+    price: 56000,
+  },
+  {
+    id: 5,
+    threshold: 24000,
+    label: "雙人日本來回商務艙機票",
+    price: 60000,
+  },
+  {
+    id: 6,
+    threshold: 32000,
+    label: "豪華南極郵輪 15 日遊",
+    price: 990000,
+  },
+  {
+    id: 7,
+    threshold: 50000,
+    label: "挪威虎鯨共遊 7 日遊",
+    price: 1000000,
   },
 ];
