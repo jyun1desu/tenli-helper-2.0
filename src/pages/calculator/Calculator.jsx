@@ -125,7 +125,7 @@ const Calculator = ({ total = 25800, points = 2000, itemList = TEST_ITEM_LIST, g
                             <Checkbox.Control />
                             <Checkbox.Label textStyle="lg">入會費</Checkbox.Label>
                         </Checkbox.Root>
-                        <Box display="flex" justifyContent="flex-end" gap="16px">
+                        <Box display="flex" justifyContent="flex-end" gap="16px" mt="1">
                             <Text display="flex" alignItems="center" justifyContent="flex-end" flex="1 1 auto" textStyle="xl">
                                 <Icon mr="1" color="icon.primary" size="s" as={PVIcon} />
                                 <Text as="span" color="content.secondary" mr="3">PV</Text>
@@ -138,7 +138,7 @@ const Calculator = ({ total = 25800, points = 2000, itemList = TEST_ITEM_LIST, g
                             </Text>
                         </Box>
                     </Box>
-                    <Box display="flex" gap="16px" mt="3">
+                    <Box display="flex" gap="16px" mt="2">
                         <Button bg="white" size="md" flex="2" variant="outline">
                             <Text textStyle="lg" color="content.tertiary" letterSpacing="2px">清除</Text>
                         </Button>
