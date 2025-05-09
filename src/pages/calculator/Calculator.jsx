@@ -1,29 +1,19 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { Box, Button, Checkbox, Icon, Text } from '@chakra-ui/react';
-import ItemList from '../../components/item-list/ItemList.jsx';
+import ItemList, { LAYOUT } from '../../components/item-list/ItemList.jsx';
 import PVIcon from '@/assets/diamond.svg?react';
 import StarIcon from '@/assets/star.svg?react';
 import ReceiptIcon from '@/assets/receipt-check.svg?react';
 import MagicWandIcon from '@/assets/magic-wand.svg?react';
+import GridIcon from '@/assets/grid.svg?react';
+import ListIcon from '@/assets/list.svg?react';
+import { TEST_GIFT_LIST, TEST_ITEM_LIST } from './test.js';
+
 
 
 const formatNumber = (value, withCurrency = true) => {
     return `${withCurrency ? '$' : ''}${value.toLocaleString()}`;
 }
-
-const TEST_GIFT_LIST = [{
-    id: 1,
-    threshold: 1000,
-    label: '瑪利歐賽車'
-}, {
-    id: 2,
-    threshold: 5000,
-    label: '皮克敏 3+4 超值組'
-}, {
-    id: 3,
-    threshold: 8000,
-    label: '任天堂 Switch2 大禮包'
-}];
 
 const getGiftData = (giftList, points) => {
     const sortedGifts = giftList.sort((a, b) => a.threshold - b.threshold);
@@ -58,9 +48,33 @@ const HighlightText = ({ children }) => {
     )
 }
 
-const Calculator = ({ total = 25800, points = 2000, giftList = TEST_GIFT_LIST }) => {
+const Calculator = ({ total = 25800, points = 2000, itemList = TEST_ITEM_LIST, giftList = TEST_GIFT_LIST }) => {
 
     const { gift, nextGift, pointsToNext, nextGiftProgress } = getGiftData(giftList, points);
+    const [currentFilter, setCurrentFilter] = useState('');
+    const [layout, setLayout] = useState(LAYOUT.LIST);
+
+    const filters = useMemo(() => {
+        const lookup = {};
+        const filters = [];
+
+        itemList.forEach(item => {
+            if (!lookup[item.series]) {
+                lookup[item.series] = true;
+                filters.push(item.series);
+            }
+        });
+
+        return filters;
+    }, [itemList]);
+
+
+    const displayList = useMemo(() => {
+        if (currentFilter) {
+            return itemList.filter(item => item.series === currentFilter)
+        }
+        return itemList;
+    }, [currentFilter, itemList]);
 
     return (
         <Box
@@ -69,9 +83,54 @@ const Calculator = ({ total = 25800, points = 2000, giftList = TEST_GIFT_LIST })
             width="100%"
             height="100%"
         >
-            <Box flex="1 1 auto">ss</Box>
-            <Box display="flex" flexDirection="column" flex="0 0 auto" my="2" mx="4" p="4" bg="white">
-                <Box display="flex" flexDirection="column"color="content.primary">
+            <Box display="flex" flex="0 0 auto" bg="white" pt="3" pb="2" px="4">
+                <Box>
+                    <Text mb="1">篩選系列</Text>
+                    <Box display="flex" gap="2" alignItems="center">
+                        {filters.map(filter => {
+                            const isSelected = currentFilter === filter;
+                            return (
+                                <Button
+                                    variant="plain"
+                                    borderRadius="80px"
+                                    py="1px"
+                                    px="5"
+                                    height="auto"
+                                    onClick={() => {
+                                        setCurrentFilter(isSelected ? '' : filter)
+                                    }}
+                                    bg={isSelected ? "bg.highlight" : "bg.primary"}
+                                    color={isSelected ? "content.primary" : "content.primary"}
+                                >
+                                    <Text textStyle="lg" fontWeight={isSelected ? 700 : 500}
+                                    >{filter}</Text>
+                                </Button>
+                            )
+                        })}
+                    </Box>
+                </Box>
+                <Box ml="auto" mt="auto" display="flex" gap="4px" p="1" borderRadius="6px" border="1px solid" borderColor="border.primary">
+                    <Button height="auto" minWidth="unset" p="0" variant="plain" onClick={() => { setLayout(LAYOUT.GRID) }}>
+                        <Icon as={GridIcon} size="md" color={layout === LAYOUT.GRID ? "content.highlight" : "content.tertiary"}
+                        />
+                    </Button>
+                    <Button
+                        height="auto"
+                        minWidth="unset"
+                        p="0"
+                        variant="plain"
+                        onClick={() => { setLayout(LAYOUT.LIST) }}
+                    >
+                        <Icon as={ListIcon} size="md" color={layout === LAYOUT.LIST ? "content.highlight" : "content.tertiary"}
+                        />
+                    </Button>
+                </Box>
+            </Box>
+            <Box flex="1 1 auto" px="4" pt="3" overflowY="scroll">
+                <ItemList layout={layout} list={displayList} />
+            </Box>
+            <Box display="flex" flexDirection="column" flex="0 0 auto" mt="3" mb="2" mx="4" p="4" bg="white">
+                <Box display="flex" flexDirection="column" color="content.primary">
                     <Box mb="2">
                         <Text letterSpacing="1px" textStyle="lg" mb="2">
                             {gift && (

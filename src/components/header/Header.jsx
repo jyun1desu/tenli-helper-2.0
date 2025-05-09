@@ -19,9 +19,12 @@ const PAGES_CONFIG = {
 
 
 const Header = ({ currentPage }) => {
+    if(currentPage === 'home') {
+        return null;
+    }
     return (
         <Box bg="white" pt="4" pb="3" px="4">
-            <Heading textAlign="center" color="content.highlight" size="2xl" letterSpacing="5px" fontWeight={600}>{PAGES_CONFIG[currentPage].title}</Heading>
+            <Heading textAlign="left" color="content.highlight" size="2xl" letterSpacing="5px" fontWeight={600}>{PAGES_CONFIG[currentPage].title}</Heading>
         </Box>
     )
 };

@@ -5,7 +5,7 @@ const customConfig = defineConfig({
     tokens: {
       colors: {
         bg: {
-            primary: "#f6efef",
+            primary: "#f6fafa",
             secondary: "#7dcc94",
             highlight: "#faf3d8",
         },
@@ -21,6 +21,7 @@ const customConfig = defineConfig({
         },
         border: {
           primary: "#d2e2ce",
+          sceondary: "#fdf0f0",
         }
       },
       space: { 
