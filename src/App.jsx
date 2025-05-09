@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Navigator from '@/components/navigator/Navigator.jsx';
 import Header from '@/components/header/Header.jsx';
+import Calculator from '@/pages/calculator/Calculator.jsx'
 import { Box } from '@chakra-ui/react';
 
 function App() {
@@ -11,8 +12,8 @@ function App() {
         <Box flex="0 0 auto">
           <Header currentPage={currentPage} />
         </Box>
-        <Box flex="1 1 auto" overflowY="auto" p="5">
-          <Box>content</Box>
+        <Box flex="1 1 auto" overflow="hidden">
+          <Calculator />
         </Box>
         <Box flex="0 0 auto">
           <Navigator currentPage={currentPage} setCurrentPage={setCurrentPage} />

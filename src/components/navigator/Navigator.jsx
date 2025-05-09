@@ -41,6 +41,7 @@ const Navigator = ({
             alignItems="center"
             borderTopLeftRadius="16px"
             borderTopRightRadius="16px"
+            boxShadow="0 4px 8px rgba(100, 100, 100, 0.2)"
         >
             {navsConfig.map((nav) => {
                 return (

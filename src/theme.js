@@ -6,16 +6,22 @@ const customConfig = defineConfig({
       colors: {
         bg: {
             primary: "#f6efef",
+            secondary: "#7dcc94",
+            highlight: "#faf3d8",
         },
         content: {
-          primary: "#222222",
+          primary: "#4f4f4f",
           secondary: "#444444",
           tertiary: "#b8b6b6",
           highlight: "#4eb56b",
         },
         icon: {
-          primary: "#ffc0cb",
+          primary: "#f6d0cc",
+          star: "#fddf6c",
         },
+        border: {
+          primary: "#d2e2ce",
+        }
       },
       space: { 
         xs: '4px',

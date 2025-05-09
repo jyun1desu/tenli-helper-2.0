@@ -16,13 +16,13 @@ const NavigationButton = ({
             bg="transparent"
             height="auto"
             color={isSelected ? "content.highlight" : "content.tertiary"}
-            transform={isSelected ? 'scale(1.1)' : ''}
+            transform={isSelected ? 'scale(1.2)' : ''}
             onClick={() => {
                 onClick(label)
             }}
         >
-            <Icon size="lg" as={IconComponent} />
-            <Text textStyle="lg" letterSpacing="1.5px">{label}</Text>
+            <Icon width="1.75rem" height="1.75rem" as={IconComponent} />
+            {/* <Text textStyle="lg" letterSpacing="1.5px">{label}</Text> */}
         </Button>
     )
 };

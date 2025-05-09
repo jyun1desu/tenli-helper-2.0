@@ -20,9 +20,8 @@ const PAGES_CONFIG = {
 
 const Header = ({ currentPage }) => {
     return (
-        <Box bg="white" pt="7" pb="5" px="6">
-            <Heading color="content.highlight" size="4xl" letterSpacing="5px" fontWeight={600}>{PAGES_CONFIG[currentPage].title}</Heading>
-            <Text color="content.tertiary" textStyle="xl" letterSpacing="1.5px">{PAGES_CONFIG[currentPage].description}</Text>
+        <Box bg="white" pt="4" pb="3" px="4">
+            <Heading textAlign="center" color="content.highlight" size="2xl" letterSpacing="5px" fontWeight={600}>{PAGES_CONFIG[currentPage].title}</Heading>
         </Box>
     )
 };
