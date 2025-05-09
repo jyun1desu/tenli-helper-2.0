@@ -10,6 +10,7 @@ const customConfig = defineConfig({
             tertiary: "#fdc088",
             highlight: "#faf3d8",
             pink: "#fcc6c6",
+            green2: "#cfd696",
         },
         content: {
           primary: "#4f4f4f",
@@ -21,10 +22,11 @@ const customConfig = defineConfig({
           primary: "#f6d0cc",
           secondary: "#dadada",
           star: "#fddf6c",
+          warning: "#e63522",
         },
         border: {
           primary: "#d2e2ce",
-          sceondary: "#fdf0f0",
+          secondary: "#fdf0f0",
         }
       },
       space: { 

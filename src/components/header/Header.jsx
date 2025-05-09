@@ -11,7 +11,7 @@ const PAGES_CONFIG = {
         description: '查詢贈品門檻及最新活動資訊'
     },
     orders: {
-        title: '待列印清單',
+        title: '待印清單',
         description: '將已儲存的表單匯出為 EXCEL 檔'
     },
 }

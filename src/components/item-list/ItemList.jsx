@@ -27,9 +27,9 @@ const Item = ({
 
     if (layout === LAYOUT.GRID) {
         return (
-            <Box overflow="hidden" display="flex" bg="white" border="1px solid" borderColor="border.sceondary" borderRadius="6px">
+            <Box overflow="hidden" display="flex" bg="white" border="1px solid" borderColor="border.secondary" borderRadius="6px">
                 {/* <Icon as={HeartIcon} /> */}
-                <Box display="flex" px="1px" alignItems="center" top="0" left="0" height="100%" bg="border.sceondary" flex="0 0 auto">
+                <Box display="flex" px="1px" alignItems="center" top="0" left="0" height="100%" bg="border.secondary" flex="0 0 auto">
                     <Text textStyle="xl" px="1" whiteSpace="pre-line" lineHeight={1.2}>
                         {`${series}\n${seriesNumber}`}
                     </Text>
@@ -55,8 +55,8 @@ const Item = ({
     }
 
     return (
-        <Box display="flex" bg="white" border="1px solid" borderColor="border.sceondary" borderRadius="6px" overflow="hidden">
-            <Box display="flex" px="1px" alignItems="center" bg="border.sceondary" flex="0 0 auto">
+        <Box display="flex" bg="white" border="1px solid" borderColor="border.secondary" borderRadius="6px" overflow="hidden">
+            <Box display="flex" px="1px" alignItems="center" bg="border.secondary" flex="0 0 auto">
                 <Text textStyle="xl" px="2" whiteSpace="pre-line" lineHeight={1.2}>
                     {`${series}\n${seriesNumber}`}
                 </Text>
