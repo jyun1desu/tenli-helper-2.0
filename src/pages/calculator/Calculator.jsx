@@ -10,12 +10,6 @@ import ItemList, { LAYOUT } from '@/components/item-list/ItemList.jsx';
 import formatNumber from '@/utils/formatNumber.js';
 import { TEST_GIFT_LIST, TEST_ITEM_LIST } from './test.js';
 
-const HighlightText = ({ children }) => {
-    return (
-        <Text as="span" bg="bg.highlight" borderRadius="50px" px="1" display="inline">{children}</Text>
-    )
-}
-
 const Calculator = ({ total = 25800, points = 2000, itemList = TEST_ITEM_LIST, giftList = TEST_GIFT_LIST }) => {
     const [currentFilter, setCurrentFilter] = useState('');
     const [layout, setLayout] = useState(LAYOUT.LIST);

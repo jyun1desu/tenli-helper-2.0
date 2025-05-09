@@ -82,6 +82,7 @@ const GiftItem = ({
 const Gift = ({
     currentPV = 6000,
     giftList = TEST_GIFT_LIST,
+    activities = ['保健食品系列買六送二', '買一隻皮克敏送歐慶'],
 }) => {
     const { gift: currentGift } = getGiftData(giftList, currentPV);
 
@@ -135,18 +136,28 @@ const Gift = ({
                     }
                 </Box>
             </Box>
-            <Box flex="0 0 auto" px="4" py="2">
-                <Box p="2" bg="white" borderRadius="8px" border="1px solid" borderStyle="dashed" borderColor="border.primary">
-                    <Text display="flex" gap="2">
-                        <Icon color="icon.primary" width="28px" height="28px" as={AnnouncementIcon} />
-                        <Text textStyle="xl" as="span" letterSpacing="2px">其他活動</Text>
-                    </Text>
-                    <Box ml="4" mt="2">
-                        <Text textStyle="lg" letterSpacing="1px">保健食品系列買六送二</Text>
+            {
+                activities.length ? (
+                    <Box flex="0 0 auto" px="4" pt="2">
+                        <Box p="2" bg="white" borderRadius="8px" border="1px solid" borderStyle="dashed" borderColor="border.primary">
+                            <Text display="flex" gap="2">
+                                <Icon color="icon.primary" width="28px" height="28px" as={AnnouncementIcon} />
+                                <Text textStyle="xl" as="span" letterSpacing="2px">其他活動</Text>
+                            </Text>
+                            <Box ml="4" mt="2">
+                                {
+                                    activities.map(activity => {
+                                        return (
+                                            <Text textStyle="lg" letterSpacing="1px">- {activity}</Text>
+                                        )
+                                    })
+                                }
+                            </Box>
+                        </Box>
                     </Box>
-                </Box>
-            </Box>
-            <Box flex="0 0 auto" px="4" pb="2" pt="0">
+                ) : ''
+            }
+            <Box flex="0 0 auto" px="4" py="2">
                 <Box display="flex" bg="white" borderRadius="8px" overflow="hidden" alignItems="center">
                     <Text
                         flex="1"
