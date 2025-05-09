@@ -85,7 +85,9 @@ const ItemList = ({ layout, onItemQuantityChange, list }) => {
             display={layout === LAYOUT.LIST ? "flex" : "grid"}
             flexDirection="column"
             gridTemplateColumns="1fr 1fr"
-            gap="8px">
+            gap="8px"
+            pb="9"
+        >
             {
                 list.map((item) => {
                     const { series,

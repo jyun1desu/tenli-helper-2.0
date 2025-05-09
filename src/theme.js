@@ -7,6 +7,7 @@ const customConfig = defineConfig({
         bg: {
             primary: "#f6fafa",
             secondary: "#7dcc94",
+            tertiary: "#fdc088",
             highlight: "#faf3d8",
         },
         content: {

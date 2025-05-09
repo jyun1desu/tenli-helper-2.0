@@ -179,7 +179,7 @@ export const TEST_ITEM_LIST = [
     series: "C",
     seriesNumber: 2,
     name: "潔膚油",
-    id: 136,
+    id: 5093,
     price: 284,
     pv: 90,
   },

@@ -15,7 +15,7 @@ function App() {
         <Box flex="1 1 auto" overflow="hidden">
           <Calculator />
         </Box>
-        <Box flex="0 0 auto">
+        <Box flex="0 0 auto" zIndex={99}>
           <Navigator currentPage={currentPage} setCurrentPage={setCurrentPage} />
         </Box>
       </Box>
