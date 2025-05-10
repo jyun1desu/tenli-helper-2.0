@@ -19,10 +19,24 @@ const OrderItem = ({
     gift = TEST_GIFT_LIST[0],
     pv = 6000,
     amount = 72000,
+    isDetailVisible = false,
+    setIsDetailVisible,
 }) => {
-    const [isDetailVisible, setIsDetailVisible] = useState(false);
+    const [isButtonReconfirming, setIsButtonReconfirming] = useState(false);
     return (
-        <Box display="flex" flexDirection="column" px="4" py="3" borderRadius="8px" bg="white">
+        <Box
+            onClick={() => {
+                setIsDetailVisible(pre => {
+                    return pre === id ? id : ''
+                })
+            }}
+            display="flex"
+            flexDirection="column"
+            px="4"
+            py="3"
+            borderRadius="8px"
+            bg="white"
+        >
             <Box display="flex" gap="7">
                 <Input
                     size="lg"
@@ -42,16 +56,46 @@ const OrderItem = ({
                     <Button p="2" bg="bg.highlight" color="content.primary" minWidth="unset">
                         <Icon as={PencilIcon} />
                     </Button>
-                    <Button p="2" variant="subtle">
-                        <Icon as={DeleteIcon} />
+                    <Button
+                        onClick={() => {
+                            if (!isButtonReconfirming) {
+                                setIsButtonReconfirming(true)
+                            } else {
+                                console.log('delete');
+                                setIsButtonReconfirming(false)
+                            }
+                        }}
+                        onBlur={() => {
+                            setIsButtonReconfirming(false)
+                        }}
+                        p="2"
+                        variant="subtle"
+                        bg={isButtonReconfirming ? "content.warning" : ""}
+                        transition="all 0s"
+                    >
+                        <Icon as={DeleteIcon} color={isButtonReconfirming ? "white" : "content.primary"} />
+                        {isButtonReconfirming ? (
+                            <Text
+                                as="span"
+                                color="white"
+                                textStyle="md"
+                                letterSpacing="2px"
+                            >
+                                確定刪除
+                            </Text>
+                        ) : null}
                     </Button>
                 </Box>
             </Box>
             <Box display="flex" mt="3" justifyContent="space-between">
                 <Text textStyle="lg"><b>{formatNumber(amount)}</b></Text>
                 <Box
-                    as="button" onClick={() => {
-                        setIsDetailVisible(pre => !pre)
+                    as="button"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setIsDetailVisible(pre => {
+                            return pre === id ? '' : id
+                        })
                     }}
                     display="flex"
                     justifyContent="flex-end"
@@ -111,14 +155,51 @@ const OrderItem = ({
     )
 }
 
-const Orders = () => {
+const Orders = ({
+    orderItems = []
+}) => {
+    const [isButtonReconfirming, setIsButtonReconfirming] = useState(false);
+    const [showingDetailItemId, setShowingDetailItemId] = useState('');
+
     return (
         <Box display="flex" flexDirection="column" height="100%">
-            <Box p py="4" px="4">
-                <OrderItem />
+            <Box flex="1 1 auto" display="flex" flexDirection="column" gap="3" pt="4" px="4" overflow="scroll">
+                {
+                    [1, 2, 3, 4, 5].map(id => {
+                        return (
+                            <OrderItem
+                                isDetailVisible={showingDetailItemId === id}
+                                id={id}
+                                setIsDetailVisible={(id) => {
+                                    setShowingDetailItemId(id);
+                                }}
+                            />
+                        )
+                    })
+                }
             </Box>
             <Box py="4" px="4" mt="auto" flex="0 0 auto">
-                <Button size="xl" width="100%" bg="bg.secondary">
+                <Button
+                    size="xl"
+                    width="100%"
+                    bg={isButtonReconfirming ? "content.warning" : "white"}
+                    variant="outline"
+                    onClick={() => {
+                        if (!isButtonReconfirming) {
+                            setIsButtonReconfirming(true)
+                        } else {
+                            console.log('delete');
+                            setIsButtonReconfirming(false)
+                        }
+                    }}
+                    onBlur={() => {
+                        setIsButtonReconfirming(false)
+                    }}
+                    color={isButtonReconfirming ? "white" : "content.tertiary"}
+                >
+                    <Text textStyle="xl" letterSpacing="2px">{isButtonReconfirming ? '確定清除' : '清除全部'}</Text>
+                </Button>
+                <Button size="xl" width="100%" bg="bg.secondary" mt="3">
                     <Text textStyle="xl" letterSpacing="2px">匯出所有資料至 <b>EXCEL</b></Text>
                     <Icon as={ShareIcon} />
                 </Button>

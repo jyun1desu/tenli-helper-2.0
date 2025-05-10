@@ -17,6 +17,7 @@ const customConfig = defineConfig({
           secondary: "#696969",
           tertiary: "#b8b6b6",
           highlight: "#4eb56b",
+          warning: "#e63522",
         },
         icon: {
           primary: "#f6d0cc",
