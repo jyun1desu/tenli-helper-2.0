@@ -34,7 +34,7 @@ const DemoModal = ({
             <Dialog.Body css={{ p: 4 }}>
               {children}
             </Dialog.Body>
-            <Dialog.Footer css={{ p: 4 }}>
+            <Dialog.Footer css={{ p: 4, pt: 2 }}>
               <Dialog.ActionTrigger asChild>
                 <Button letterSpacing="1px" size="lg" variant="outline" color="content.tertiary" textStyle="lg">{cancelText}</Button>
               </Dialog.ActionTrigger>

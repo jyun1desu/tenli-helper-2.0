@@ -197,13 +197,13 @@ const Calculator = ({ total = 25800, points = 2000, itemList = TEST_ITEM_LIST, g
             >
                 <Field.Root width="80%" orientation="horizontal">
                     <CustomerNameInput placeholder='陳小麗' />
-                    <Field.Label letterSpacing="2px" textStyle="xl" flex="0 0 auto" mr="2">
+                    <Field.Label letterSpacing="2px" textStyle="2xl" flex="0 0 auto" mr="2">
                         的訂單
                         <Icon as={MagicWand} />
                     </Field.Label>
                 </Field.Root>
                 <Box borderRadius="8px" border="1px solid" borderStyle="dashed" borderColor="border.secondary" p="3" mt="4">
-                    <Text textStyle="md" letterSpacing="2px" display="flex" alignItems="center" gap="2">
+                    <Text textStyle="lg" letterSpacing="2px" display="flex" alignItems="center" gap="2">
                         <Icon color="icon.primary" as={ShoppingBagIcon} />
                         訂單内容
                     </Text>
