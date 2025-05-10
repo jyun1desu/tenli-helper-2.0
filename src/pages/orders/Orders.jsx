@@ -3,6 +3,7 @@ import { Box, Button, Icon, Text, Input, Grid, GridItem } from '@chakra-ui/react
 import ShareIcon from '@/assets/share-03.svg?react';
 import GiftIcon from '@/assets/gift.svg?react';
 import PencilIcon from '@/assets/pencil.svg?react';
+import HeartIcon from '@/assets/heart-rounded.svg?react';
 import DeleteIcon from '@/assets/trash-01.svg?react';
 import ChevronRightIcon from '@/assets/chevron-right.svg?react';
 import formatNumber from '@/utils/formatNumber.js';
@@ -18,6 +19,7 @@ const OrderItem = ({
     items = TEST_ORDER_ITEM_LIST,
     gift = TEST_GIFT_LIST[0],
     pv = 6000,
+    membershipFee = 0,
     amount = 72000,
     isDetailVisible = false,
     setIsDetailVisible,
@@ -132,22 +134,40 @@ const OrderItem = ({
                                 }
                             </Grid>
                         </Box>
-
                         <Box borderTop="1px solid" borderStyle="dashed" borderColor="border.secondary" mt="2" pt="3">
                             <Grid templateColumns="repeat(2, 1fr)" gap="3" px="3">
                                 <GridItem display="flex" alignItems="center" gap="3">
                                     <Icon color="icon.primary" size="md" as={GiftIcon} />
                                     <Text textStyle="md" letterSpacing="2px" color="content.primary">
-                                        {gift?.label || '尚無贈品'}
+                                        {gift ? '贈品' : '尚無贈品'}
                                     </Text>
                                 </GridItem>
                                 {gift ? (
                                     <GridItem>
-                                        <Text textStyle="md" letterSpacing="2px" color="content.primary" textAlign="right">x <b>1</b></Text>
+                                        <Text textStyle="md" letterSpacing="2px" color="content.primary" textAlign="right">{gift.label}</Text>
                                     </GridItem>
                                 ) : null}
                             </Grid>
                         </Box>
+                        {
+                            membershipFee ? (
+                                <Box borderTop="1px solid" borderStyle="dashed" borderColor="border.secondary" mt="2" pt="3">
+                                    <Grid templateColumns="repeat(2, 1fr)" gap="3" px="3">
+                                        <GridItem display="flex" alignItems="center" gap="3">
+                                            <Icon color="icon.primary" size="md" as={HeartIcon} />
+                                            <Text textStyle="md" letterSpacing="2px" color="content.primary">
+                                                入會費
+                                            </Text>
+                                        </GridItem>
+                                        {membershipFee ? (
+                                            <GridItem>
+                                                <Text textStyle="md" fontWeight={600} letterSpacing="2px" color="content.primary" textAlign="right">{formatNumber(membershipFee, true)}</Text>
+                                            </GridItem>
+                                        ) : null}
+                                    </Grid>
+                                </Box>
+                            ) : null
+                        }
                     </>
                 ) : null
             }
