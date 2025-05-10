@@ -1,18 +1,24 @@
 import React, { useMemo, useState } from 'react';
-import { Box, Button, Checkbox, Icon, Text } from '@chakra-ui/react';
+import { Box, Button, Checkbox, Field, Icon, Input, Text } from '@chakra-ui/react';
 import PVIcon from '@/assets/diamond.svg?react';
 import ReceiptIcon from '@/assets/receipt-check.svg?react';
 import GiftIcon from '@/assets/gift.svg?react';
 import GridIcon from '@/assets/grid.svg?react';
+import MagicWand from '@/assets/magic-wand.svg?react';
 import ListIcon from '@/assets/list.svg?react';
+import ShoppingBagIcon from '@/assets/shopping-bag.svg?react';
 import GiftInfoSummary from '@/components/giftInfoSummary/GiftInfoSummary.jsx';
 import ItemList, { LAYOUT } from '@/components/item-list/ItemList.jsx';
+import Modal from '@/components/modal/Modal.jsx';
 import formatNumber from '@/utils/formatNumber.js';
-import { TEST_GIFT_LIST, TEST_ITEM_LIST } from './test.js';
+import { TEST_GIFT_LIST, TEST_ITEM_LIST, TEST_ORDER_ITEM_LIST } from './test.js';
+import CustomerNameInput from '../../components/customer-name-input/CustomerNameInput.jsx';
+import OrderDetail from '../../components/orderItem/OrderItem.jsx';
 
 const Calculator = ({ total = 25800, points = 2000, itemList = TEST_ITEM_LIST, giftList = TEST_GIFT_LIST }) => {
     const [currentFilter, setCurrentFilter] = useState('');
     const [layout, setLayout] = useState(LAYOUT.LIST);
+    const [isModalOpen, setModalOpen] = useState(false);
     const [isGiftAreaVisible, setIsGiftAreaVisible] = useState(false);
 
     const filters = useMemo(() => {
@@ -136,7 +142,15 @@ const Calculator = ({ total = 25800, points = 2000, itemList = TEST_ITEM_LIST, g
                         <Button bg="white" size="md" flex="2" variant="outline">
                             <Text textStyle="lg" color="content.tertiary" letterSpacing="2px">清除</Text>
                         </Button>
-                        <Button bg="bg.secondary" size="md" flex="5">
+                        <Button
+                            onClick={() => {
+                                setModalOpen(true)
+                            }}
+                            bg="bg.secondary"
+                            size="md"
+                            flex="5"
+                            disabled={false}
+                        >
                             <Text textStyle="lg" letterSpacing="2px">儲存資料</Text>
                         </Button>
                     </Box>
@@ -172,9 +186,35 @@ const Calculator = ({ total = 25800, points = 2000, itemList = TEST_ITEM_LIST, g
                     >
                         <Icon as={GiftIcon} size="md" color="white" />
                     </Box>
-                    <GiftInfoSummary giftList={giftList} currentPV={points}/>
+                    <GiftInfoSummary giftList={giftList} currentPV={points} />
                 </Box>
             </Box>
+            <Modal
+                id="save-order"
+                isOpen={isModalOpen}
+                setOpen={setModalOpen}
+                title="儲存資料"
+            >
+                <Field.Root width="80%" orientation="horizontal">
+                    <CustomerNameInput placeholder='陳小麗' />
+                    <Field.Label letterSpacing="2px" textStyle="xl" flex="0 0 auto" mr="2">
+                        的訂單
+                        <Icon as={MagicWand} />
+                    </Field.Label>
+                </Field.Root>
+                <Box borderRadius="8px" border="1px solid" borderStyle="dashed" borderColor="border.secondary" p="3" mt="4">
+                    <Text textStyle="md" letterSpacing="2px" display="flex" alignItems="center" gap="2">
+                        <Icon color="icon.primary" as={ShoppingBagIcon} />
+                        訂單内容
+                    </Text>
+                    <OrderDetail
+                        items={TEST_ORDER_ITEM_LIST}
+                        gift={TEST_GIFT_LIST[2]}
+                        membershipFee={400}
+                        showTotal={true}
+                    />
+                </Box>
+            </Modal>
         </Box>
     )
 };

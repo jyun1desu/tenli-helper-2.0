@@ -19,7 +19,7 @@ const Content = ({ currentPage }) => {
 }
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('orders');
+  const [currentPage, setCurrentPage] = useState('home');
 
   return (
     <Box fontWeight="500" color="content.primary" width="100dvw" height="100dvh" bg="white">

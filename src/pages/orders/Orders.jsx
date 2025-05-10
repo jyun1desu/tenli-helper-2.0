@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Box, Button, Icon, Text, Input, Grid, GridItem } from '@chakra-ui/react';
 import ShareIcon from '@/assets/share-03.svg?react';
-import GiftIcon from '@/assets/gift.svg?react';
 import PencilIcon from '@/assets/pencil.svg?react';
-import HeartIcon from '@/assets/heart-rounded.svg?react';
 import DeleteIcon from '@/assets/trash-01.svg?react';
 import ChevronRightIcon from '@/assets/chevron-right.svg?react';
 import formatNumber from '@/utils/formatNumber.js';
 import { TEST_GIFT_LIST, TEST_ORDER_ITEM_LIST } from '../calculator/test';
+import CustomerNameInput from '@/components/customer-name-input/CustomerNameInput';
+import OrderDetail from '@/components/orderItem/OrderItem';
 
 
 const OrderItem = ({
@@ -40,20 +40,7 @@ const OrderItem = ({
             bg="white"
         >
             <Box display="flex" gap="7">
-                <Input
-                    size="lg"
-                    px="1"
-                    placeholder="客人姓名"
-                    variant="flushed"
-                    focusRingWidth="1px"
-                    letterSpacing="3px"
-                    textStyle="xl"
-                    fontWeight={500}
-                    borderColor="border.primary"
-                    color="content.highlight"
-                    _placeholder={{ color: "#4eb56b5c" }}
-                    css={{ "--focus-color": "#d2e2ce" }}
-                />
+                <CustomerNameInput placeholder='客人姓名' />
                 <Box display="flex" alignItems="center" gap="2">
                     <Button p="2" bg="bg.highlight" color="content.primary" minWidth="unset">
                         <Icon as={PencilIcon} />
@@ -112,63 +99,11 @@ const OrderItem = ({
             </Box>
             {
                 isDetailVisible ? (
-                    <>
-                        <Box borderTop="1px solid" borderStyle="dashed" borderColor="border.secondary" mt="2" pt="3">
-                            <Grid templateColumns="repeat(2, 1fr)" gap="3" px="3">
-                                {
-                                    items.map((item) => {
-                                        const { series, seriesNumber, name, amount } = item;
-                                        return (
-                                            <>
-                                                <GridItem >
-                                                    <Text textStyle="md" letterSpacing="2px" color="content.primary" textAlign="left">
-                                                        {`${series}${seriesNumber} ${name}`}
-                                                    </Text>
-                                                </GridItem>
-                                                <GridItem>
-                                                    <Text textStyle="md" letterSpacing="2px" color="content.primary" textAlign="right">x <b>{amount}</b></Text>
-                                                </GridItem>
-                                            </>
-                                        );
-                                    })
-                                }
-                            </Grid>
-                        </Box>
-                        <Box borderTop="1px solid" borderStyle="dashed" borderColor="border.secondary" mt="2" pt="3">
-                            <Grid templateColumns="repeat(2, 1fr)" gap="3" px="3">
-                                <GridItem display="flex" alignItems="center" gap="3">
-                                    <Icon color="icon.primary" size="md" as={GiftIcon} />
-                                    <Text textStyle="md" letterSpacing="2px" color="content.primary">
-                                        {gift ? '贈品' : '尚無贈品'}
-                                    </Text>
-                                </GridItem>
-                                {gift ? (
-                                    <GridItem>
-                                        <Text textStyle="md" letterSpacing="2px" color="content.primary" textAlign="right">{gift.label}</Text>
-                                    </GridItem>
-                                ) : null}
-                            </Grid>
-                        </Box>
-                        {
-                            membershipFee ? (
-                                <Box borderTop="1px solid" borderStyle="dashed" borderColor="border.secondary" mt="2" pt="3">
-                                    <Grid templateColumns="repeat(2, 1fr)" gap="3" px="3">
-                                        <GridItem display="flex" alignItems="center" gap="3">
-                                            <Icon color="icon.primary" size="md" as={HeartIcon} />
-                                            <Text textStyle="md" letterSpacing="2px" color="content.primary">
-                                                入會費
-                                            </Text>
-                                        </GridItem>
-                                        {membershipFee ? (
-                                            <GridItem>
-                                                <Text textStyle="md" fontWeight={600} letterSpacing="2px" color="content.primary" textAlign="right">{formatNumber(membershipFee, true)}</Text>
-                                            </GridItem>
-                                        ) : null}
-                                    </Grid>
-                                </Box>
-                            ) : null
-                        }
-                    </>
+                    <OrderDetail
+                        items={items}
+                        gift={gift}
+                        membershipFee={membershipFee}
+                    />
                 ) : null
             }
         </Box>
@@ -188,6 +123,7 @@ const Orders = ({
                     [1, 2, 3, 4, 5].map(id => {
                         return (
                             <OrderItem
+                                key={id}
                                 isDetailVisible={showingDetailItemId === id}
                                 id={id}
                                 setIsDetailVisible={(id) => {
