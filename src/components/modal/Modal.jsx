@@ -10,6 +10,7 @@ const DemoModal = ({
   confirmText = '確定',
   cancelText = '取消',
   title,
+  onConfirm,
 }) => {
   return (
     <Dialog.Root
@@ -39,7 +40,13 @@ const DemoModal = ({
               <Dialog.ActionTrigger asChild>
                 <Button letterSpacing="1px" size="lg" variant="outline" color="content.tertiary" textStyle="lg">{cancelText}</Button>
               </Dialog.ActionTrigger>
-              <Button letterSpacing="1px" size="lg" bg="bg.secondary" textStyle="lg">{confirmText}</Button>
+              <Button 
+              letterSpacing="1px" 
+              size="lg" 
+              bg="bg.secondary"
+               textStyle="lg"
+               onClick={onConfirm}
+               >{confirmText}</Button>
             </Dialog.Footer>
             <Dialog.CloseTrigger asChild>
               <CloseButton size="lg" />

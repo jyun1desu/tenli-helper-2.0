@@ -1,29 +1,48 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Box, Button, Icon, Text, Input, Grid, GridItem } from '@chakra-ui/react';
-import ShareIcon from '@/assets/share-03.svg?react';
 import PencilIcon from '@/assets/pencil.svg?react';
 import DeleteIcon from '@/assets/trash-01.svg?react';
 import ChevronRightIcon from '@/assets/chevron-right.svg?react';
 import formatNumber from '@/utils/formatNumber.js';
-import { TEST_GIFT_LIST, TEST_ORDER_ITEM_LIST } from '../calculator/test';
 import CustomerNameInput from '@/components/customer-name-input/CustomerNameInput';
 import OrderDetail from '@/components/orderItem/OrderItem';
+import getGiftsData from '@/utils/getGiftsData';
+import { PRODUCT_DATA, PROMOTION_DATA } from '../../utils/const';
 
 
 const OrderItem = ({
     id,
     customerName,
     onCustomerNameChange,
-    onDelete,
-    items = [],
-    gift,
-    pv = 0,
+    onDeleteOrder,
+    importItem,
+    items = {},
     membershipFee = 0,
-    amount = 0,
     isDetailVisible = false,
     setIsDetailVisible,
 }) => {
     const [isButtonReconfirming, setIsButtonReconfirming] = useState(false);
+
+    const { total, points } = useMemo(() => {
+        const { total, points } = Object.entries(items).reduce((acc, cur) => {
+            const [itemId, itemQuantity] = cur
+            const { price, pv } = PRODUCT_DATA[itemId];
+            const total = acc.total + price * itemQuantity;
+            const points = acc.points + pv * itemQuantity;
+            return {
+                total, points
+            }
+        }, { total: membershipFee, points: 0 })
+
+        return { total, points }
+    }, [items, membershipFee]);
+
+    const giftList = useMemo(() => {
+        return Object.values(PROMOTION_DATA.gifts).sort((a, b) => a.value - b.value);
+    }, [])
+
+    const giftData = getGiftsData(giftList, points);
+
     return (
         <Box
             onClick={() => {
@@ -39,9 +58,11 @@ const OrderItem = ({
             bg="white"
         >
             <Box display="flex" gap="7">
-                <CustomerNameInput placeholder='客人姓名' />
+                <CustomerNameInput value={customerName} onChange={onCustomerNameChange} placeholder='客人姓名' />
                 <Box display="flex" alignItems="center" gap="2">
-                    <Button p="2" bg="bg.highlight" color="content.primary" minWidth="unset">
+                    <Button p="2" bg="bg.highlight" color="content.primary" minWidth="unset" onClick={()=>{
+                        importItem(id)
+                    }}>
                         <Icon as={PencilIcon} />
                     </Button>
                     <Button
@@ -49,7 +70,7 @@ const OrderItem = ({
                             if (!isButtonReconfirming) {
                                 setIsButtonReconfirming(true)
                             } else {
-                                console.log('delete');
+                                onDeleteOrder(id)
                                 setIsButtonReconfirming(false)
                             }
                         }}
@@ -76,7 +97,7 @@ const OrderItem = ({
                 </Box>
             </Box>
             <Box display="flex" mt="3" justifyContent="space-between">
-                <Text textStyle="lg"><b>{formatNumber(amount)}</b></Text>
+                <Text textStyle="lg"><b>{formatNumber(total)}</b></Text>
                 <Box
                     as="button"
                     onClick={(e) => {
@@ -99,8 +120,8 @@ const OrderItem = ({
             {
                 isDetailVisible ? (
                     <OrderDetail
-                        items={items}
-                        gift={gift}
+                        cartItems={items}
+                        gift={giftData.gift}
                         membershipFee={membershipFee}
                     />
                 ) : null
@@ -110,21 +131,33 @@ const OrderItem = ({
 }
 
 const Orders = ({
-    orderItems = []
+    onDeleteOrder,
+    importItem,
+    onCustomerNameChange,
+    orderHistoryList = {},
 }) => {
     const [isButtonReconfirming, setIsButtonReconfirming] = useState(false);
     const [showingDetailItemId, setShowingDetailItemId] = useState('');
+
+    const orderItems = Object.values(orderHistoryList)
 
     return (
         <Box display="flex" flexDirection="column" height="100%">
             <Box flex="1 1 auto" display="flex" flexDirection="column" gap="3" pt="4" px="4" overflow="scroll">
                 {
-                    orderItems.map(id => {
+                    orderItems.map(item => {
+                        const { id, customerName, items, membershipFee } = item;
                         return (
                             <OrderItem
                                 key={id}
-                                isDetailVisible={showingDetailItemId === id}
                                 id={id}
+                                onDeleteOrder={onDeleteOrder}
+                                onCustomerNameChange={onCustomerNameChange}
+                                customerName={customerName}
+                                importItem={importItem}
+                                membershipFee={membershipFee}
+                                items={items}
+                                isDetailVisible={showingDetailItemId === id}
                                 setIsDetailVisible={(id) => {
                                     setShowingDetailItemId(id);
                                 }}

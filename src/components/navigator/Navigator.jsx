@@ -4,6 +4,7 @@ import { Box } from '@chakra-ui/react';
 import Home from '@/assets/calculator.svg?react';
 import Gift from '@/assets/gift.svg?react';
 import Orders from '@/assets/file.svg?react';
+import AddMember from '@/assets/user-edit.svg?react';
 import NavigationButton from './naviation-button/NavigationButton.jsx';
 
 const navsConfig = [{
@@ -14,10 +15,14 @@ const navsConfig = [{
     icon: Gift,
     label: "贈品活動",
     value: 'gift'
-}, {
+},{
     icon: Orders,
     label: "待印表單",
     value: 'orders'
+},{
+    icon: AddMember,
+    label: "填寫入會單",
+    value: 'join'
 }];
 
 const Navigator = ({

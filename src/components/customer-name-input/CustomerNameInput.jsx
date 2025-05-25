@@ -18,6 +18,8 @@ const CustomerNameInput = ({
             fontWeight={500}
             borderColor="border.primary"
             color="content.highlight"
+            onChange={onChange}
+            value={value}
             _placeholder={{ color: "#4eb56b5c" }}
             css={{ "--focus-color": "#d2e2ce" }}
         />

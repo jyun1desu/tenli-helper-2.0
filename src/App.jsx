@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { Box } from '@chakra-ui/react';
+import { v4 as uuidv4 } from 'uuid';
 import { useFormik } from 'formik';
 import Navigator from '@/components/navigator/Navigator.jsx';
 import Header from '@/components/header/Header.jsx';
@@ -8,6 +9,8 @@ import Gift from '@/pages/gift/Gift.jsx'
 import Orders from '@/pages/orders/Orders.jsx'
 import getGiftsData from '@/utils/getGiftsData';
 import { MEMBERSHIP_FEE, PRODUCT_DATA, PROMOTION_DATA } from '@/utils/const';
+import { useLocalStorage } from "@uidotdev/usehooks";
+import JoinForm from './pages/join/JoinForm';
 
 const Content = ({ currentPage, total, points, ...props }) => {
   switch (currentPage) {
@@ -15,6 +18,8 @@ const Content = ({ currentPage, total, points, ...props }) => {
       return <Gift currentPV={points} {...props} />;
     case 'orders':
       return <Orders {...props} />;
+    case 'join':
+      return <JoinForm {...props} />
     case 'home':
     default:
       return <Calculator total={total} points={points} {...props} />;
@@ -23,14 +28,42 @@ const Content = ({ currentPage, total, points, ...props }) => {
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
-  const { values = {}, setFieldValue, handleReset } = useFormik({
+  const [orderHistoryList, setOrderHistoryList] = useLocalStorage("orders", {});
+  const { values = {}, setFieldValue, handleReset, setValues } = useFormik({
     initialValues: {
+      id: "",
+      customerName: '',
       items: {},
       membershipFee: 0,
     },
   });
 
-  const { items = {}, membershipFee } = values;
+  const deleteOrder = (orderId) => {
+    const copy = { ...orderHistoryList };
+    delete copy[orderId]
+    setOrderHistoryList(copy);
+  }
+
+  const saveItem = () => {
+    const id = values.id || uuidv4().substring(0, 5);
+    const toSave = {
+      ...orderHistoryList,
+      [id]: {
+        ...values,
+        id,
+        timestamp: Date.now()
+      }
+    }
+    setOrderHistoryList(toSave);
+    handleReset();
+  }
+
+  const importItem = (id) => {
+    const itemData = orderHistoryList[id];
+    setValues(itemData);
+  };
+
+  const { items = {}, membershipFee, customerName = '' } = values;
 
   const { total, points } = useMemo(() => {
     const { total, points } = Object.entries(items).reduce((acc, cur) => {
@@ -67,14 +100,23 @@ function App() {
             cartItems={values.items}
             resetForm={handleReset}
             giftData={giftData}
+            onDeleteOrder={deleteOrder}
+            saveItem={saveItem}
+            importItem={importItem}
+            orderHistoryList={orderHistoryList}
+            customerName={customerName}
+            onCustomerNameChange={(name) => {
+              setFieldValue('customerName', name);
+            }}
             onMembershipChange={(isChecked) => {
               setFieldValue('membershipFee', isChecked ? MEMBERSHIP_FEE : 0)
             }}
             onItemQuantityChange={(id, inputQuantity) => {
-              setFieldValue('items', {
+              const toSave = {
                 ...values.items,
                 [id]: inputQuantity
-              })
+              };
+              setFieldValue('items', toSave)
             }}
           />
         </Box>

@@ -21,9 +21,12 @@ const Calculator = ({
     points = 0,
     membershipFee = 0,
     giftData = {},
+    customerName,
+    onCustomerNameChange,
     onMembershipChange,
     onItemQuantityChange,
-    resetForm
+    saveItem,
+    resetForm,
 }) => {
     const [currentFilter, setCurrentFilter] = useState('全部');
     const [layout, setLayout] = useState(LAYOUT.LIST);
@@ -177,7 +180,7 @@ const Calculator = ({
                             bg="bg.secondary"
                             size="md"
                             flex="5"
-                            disabled={false}
+                            disabled={total === 0}
                         >
                             <Text textStyle="lg" letterSpacing="2px">儲存資料</Text>
                         </Button>
@@ -223,9 +226,15 @@ const Calculator = ({
                 setOpen={setModalOpen}
                 title="儲存資料"
                 confirmText="儲存"
+                onConfirm={()=>{
+                    saveItem();
+                    setModalOpen(false);
+                }}
             >
                 <Field.Root width="80%" orientation="horizontal">
-                    <CustomerNameInput placeholder='陳小麗' />
+                    <CustomerNameInput value={customerName} onChange={(e) => {
+                        onCustomerNameChange(e.target.value)
+                    }} placeholder='陳小麗' />
                     <Field.Label letterSpacing="2px" textStyle="2xl" flex="0 0 auto" mr="2">
                         的訂單
                         <Icon as={MagicWand} />
