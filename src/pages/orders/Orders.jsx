@@ -8,11 +8,13 @@ import CustomerNameInput from '@/components/customer-name-input/CustomerNameInpu
 import OrderDetail from '@/components/orderItem/OrderItem';
 import getGiftsData from '@/utils/getGiftsData';
 import { PRODUCT_DATA, PROMOTION_DATA } from '../../utils/const';
+import { formatTimestampToDateString } from '../../utils/kk';
 
 
 const OrderItem = ({
     id,
     customerName,
+    timestamp,
     onCustomerNameChange,
     onDeleteOrder,
     importItem,
@@ -57,6 +59,7 @@ const OrderItem = ({
             borderRadius="8px"
             bg="white"
         >
+            <Text color="content.tertiary" mb="1"><b>{formatTimestampToDateString(timestamp)}</b></Text>
             <Box display="flex" gap="7">
                 <CustomerNameInput value={customerName} onChange={onCustomerNameChange} placeholder='客人姓名' />
                 <Box display="flex" alignItems="center" gap="2">
@@ -132,26 +135,27 @@ const OrderItem = ({
 
 const Orders = ({
     onDeleteOrder,
+    clear,
     importItem,
     onCustomerNameChange,
     orderHistoryList = {},
 }) => {
     const [isButtonReconfirming, setIsButtonReconfirming] = useState(false);
     const [showingDetailItemId, setShowingDetailItemId] = useState('');
-
-    const orderItems = Object.values(orderHistoryList)
+    const orderItems = Object.values(orderHistoryList) || [];
 
     return (
         <Box display="flex" flexDirection="column" height="100%">
             <Box flex="1 1 auto" display="flex" flexDirection="column" gap="3" pt="4" px="4" overflow="scroll">
                 {
                     orderItems.map(item => {
-                        const { id, customerName, items, membershipFee } = item;
+                        const { id, customerName, items, membershipFee, timestamp } = item;
                         return (
                             <OrderItem
                                 key={id}
                                 id={id}
                                 onDeleteOrder={onDeleteOrder}
+                                timestamp={timestamp}
                                 onCustomerNameChange={onCustomerNameChange}
                                 customerName={customerName}
                                 importItem={importItem}
@@ -168,6 +172,7 @@ const Orders = ({
             </Box>
             <Box py="4" px="4" mt="auto" flex="0 0 auto">
                 <Button
+                    disabled={!orderItems.length}
                     size="xl"
                     width="100%"
                     bg={isButtonReconfirming ? "content.warning" : "white"}
@@ -176,7 +181,7 @@ const Orders = ({
                         if (!isButtonReconfirming) {
                             setIsButtonReconfirming(true)
                         } else {
-                            console.log('delete');
+                            clear();
                             setIsButtonReconfirming(false)
                         }
                     }}

@@ -38,6 +38,10 @@ function App() {
     },
   });
 
+  const clear = () => {
+    setOrderHistoryList({})
+  }
+
   const deleteOrder = (orderId) => {
     const copy = { ...orderHistoryList };
     delete copy[orderId]
@@ -96,6 +100,7 @@ function App() {
             currentPage={currentPage}
             total={total}
             points={points}
+            clear={clear}
             membershipFee={membershipFee}
             cartItems={values.items}
             resetForm={handleReset}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Box, Icon, Text, Grid, GridItem } from '@chakra-ui/react';
 import GiftIcon from '@/assets/gift.svg?react';
 import HeartIcon from '@/assets/heart-rounded.svg?react';
@@ -13,7 +13,7 @@ const OrderDetail = ({
     showTotal = false,
 }) => {
     const items = Object.entries(cartItems)
-        .filter(([_, quantity]) => {
+        .filter(([, quantity]) => {
             return quantity !== 0
         }).map(([itemId, quantity]) => {
             return { ...PRODUCT_DATA[itemId], quantity }
@@ -34,7 +34,7 @@ const OrderDetail = ({
                         items.map((item) => {
                             const { seriesNumber, name, quantity } = item;
                             return (
-                                <>
+                                <Fragment key={item.id}>
                                     <GridItem>
                                         <Text textStyle="lg" letterSpacing="2px" color="content.sceondary" textAlign="left">
                                             {`${seriesNumber} ${name}`}
@@ -43,7 +43,7 @@ const OrderDetail = ({
                                     <GridItem>
                                         <Text textStyle="lg" letterSpacing="2px" color="content.tertiary" textAlign="right">x <b>{quantity}</b></Text>
                                     </GridItem>
-                                </>
+                                </Fragment>
                             );
                         })
                     }
