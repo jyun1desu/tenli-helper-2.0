@@ -1,5 +1,5 @@
 const getGiftData = (giftList, points) => {
-    const sortedGifts = giftList.sort((a, b) => a.threshold - b.threshold);
+    const sortedGifts = giftList.sort((a, b) => a.pvCost - b.pvCost);
 
     let currentGift = undefined;
     let nextGift = undefined;
@@ -7,7 +7,7 @@ const getGiftData = (giftList, points) => {
     for (let i = 0; i < sortedGifts.length; i++) {
         const gift = sortedGifts[i];
 
-        if (points >= gift.threshold) {
+        if (points >= gift.pvCost) {
             currentGift = gift;
         } else {
             nextGift = gift;
@@ -15,12 +15,12 @@ const getGiftData = (giftList, points) => {
         }
     }
 
-    const pointsToNext = nextGift ? nextGift.threshold - points : 0;
+    const pointsToNext = nextGift ? nextGift.pvCost - points : 0;
 
     return {
         gift: currentGift || undefined,
         nextGift: nextGift || undefined,
-        nextGiftProgress: nextGift ? (points / nextGift.threshold) * 100 : 100,
+        nextGiftProgress: nextGift ? (points / nextGift.pvCost) * 100 : 100,
         pointsToNext,
     };
 }

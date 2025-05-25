@@ -13,6 +13,7 @@ const DemoModal = ({
 }) => {
   return (
     <Dialog.Root
+      id={id}
       size="lg"
       placement="center"
       motionPreset="slide-in-bottom"
@@ -24,7 +25,7 @@ const DemoModal = ({
         <Dialog.Backdrop />
         <Dialog.Positioner>
           <Dialog.Content css={{ fontSize: 'xl', margin: '16px', color: 'content.primary', overflow: 'hidden' }}>
-            <Dialog.Header css={{bg: title ? 'bg.primary' : '', p: '4' }}>
+            <Dialog.Header css={{ bg: title ? 'bg.primary' : '', p: '4' }}>
               <Dialog.Title css={{
                 fontWeight: 600,
                 fontSize: '2xl',

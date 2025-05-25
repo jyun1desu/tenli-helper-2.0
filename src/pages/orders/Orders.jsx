@@ -15,12 +15,11 @@ const OrderItem = ({
     customerName,
     onCustomerNameChange,
     onDelete,
-    onImport,
-    items = TEST_ORDER_ITEM_LIST,
-    gift = TEST_GIFT_LIST[0],
-    pv = 6000,
+    items = [],
+    gift,
+    pv = 0,
     membershipFee = 0,
-    amount = 72000,
+    amount = 0,
     isDetailVisible = false,
     setIsDetailVisible,
 }) => {
@@ -120,7 +119,7 @@ const Orders = ({
         <Box display="flex" flexDirection="column" height="100%">
             <Box flex="1 1 auto" display="flex" flexDirection="column" gap="3" pt="4" px="4" overflow="scroll">
                 {
-                    [1, 2, 3, 4, 5].map(id => {
+                    orderItems.map(id => {
                         return (
                             <OrderItem
                                 key={id}
@@ -154,10 +153,6 @@ const Orders = ({
                     color={isButtonReconfirming ? "white" : "content.tertiary"}
                 >
                     <Text textStyle="xl" letterSpacing="2px">{isButtonReconfirming ? '確定清除' : '清除全部'}</Text>
-                </Button>
-                <Button size="xl" width="100%" bg="bg.secondary" mt="3">
-                    <Text textStyle="xl" letterSpacing="2px">匯出所有資料至 <b>EXCEL</b></Text>
-                    <Icon as={ShareIcon} />
                 </Button>
             </Box>
         </Box>

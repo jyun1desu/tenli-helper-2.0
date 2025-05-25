@@ -11,19 +11,32 @@ import GiftInfoSummary from '@/components/giftInfoSummary/GiftInfoSummary.jsx';
 import ItemList, { LAYOUT } from '@/components/item-list/ItemList.jsx';
 import Modal from '@/components/modal/Modal.jsx';
 import formatNumber from '@/utils/formatNumber.js';
-import { TEST_GIFT_LIST, TEST_ITEM_LIST, TEST_ORDER_ITEM_LIST } from './test.js';
 import CustomerNameInput from '../../components/customer-name-input/CustomerNameInput.jsx';
 import OrderDetail from '../../components/orderItem/OrderItem.jsx';
+import { MEMBERSHIP_FEE, PRODUCT_DATA, PROMOTION_DATA } from '../../utils/const.js';
 
-const Calculator = ({ total = 25800, points = 2000, itemList = TEST_ITEM_LIST, giftList = TEST_GIFT_LIST }) => {
-    const [currentFilter, setCurrentFilter] = useState('');
+const Calculator = ({
+    cartItems = {},
+    total = 0,
+    points = 0,
+    membershipFee = 0,
+    giftData = {},
+    onMembershipChange,
+    onItemQuantityChange,
+    resetForm
+}) => {
+    const [currentFilter, setCurrentFilter] = useState('全部');
     const [layout, setLayout] = useState(LAYOUT.LIST);
     const [isModalOpen, setModalOpen] = useState(false);
     const [isGiftAreaVisible, setIsGiftAreaVisible] = useState(false);
 
+    const itemList = useMemo(() => {
+        return Object.values(PRODUCT_DATA).sort((a, b) => a.order - b.order);
+    }, []);
+
     const filters = useMemo(() => {
         const lookup = {};
-        const filters = [];
+        const filters = ['全部'];
 
         itemList.forEach(item => {
             if (!lookup[item.series]) {
@@ -36,7 +49,7 @@ const Calculator = ({ total = 25800, points = 2000, itemList = TEST_ITEM_LIST, g
     }, [itemList]);
 
     const displayList = useMemo(() => {
-        if (currentFilter) {
+        if (currentFilter !== '全部') {
             return itemList.filter(item => item.series === currentFilter)
         }
         return itemList;
@@ -64,7 +77,11 @@ const Calculator = ({ total = 25800, points = 2000, itemList = TEST_ITEM_LIST, g
                                     px="5"
                                     height="auto"
                                     onClick={() => {
-                                        setCurrentFilter(isSelected ? '' : filter)
+                                        if (filter === '全部') {
+                                            setCurrentFilter('全部');
+                                            return;
+                                        }
+                                        setCurrentFilter(isSelected ? '全部' : filter)
                                     }}
                                     bg={isSelected ? "bg.highlight" : "bg.primary"}
                                     color={isSelected ? "content.primary" : "content.primary"}
@@ -102,7 +119,12 @@ const Calculator = ({ total = 25800, points = 2000, itemList = TEST_ITEM_LIST, g
                     setIsGiftAreaVisible(false)
                 }}
             >
-                <ItemList layout={layout} list={displayList} />
+                <ItemList
+                    layout={layout}
+                    list={displayList}
+                    onItemQuantityChange={onItemQuantityChange}
+                    cartItems={cartItems}
+                />
             </Box>
             <Box
                 display="flex"
@@ -120,10 +142,16 @@ const Calculator = ({ total = 25800, points = 2000, itemList = TEST_ITEM_LIST, g
                     zIndex={2}
                 >
                     <Box display="flex" flexDirection="column" color="content.primary">
-                        <Checkbox.Root variant="solid" size="md" alignSelf="flex-end">
+                        <Checkbox.Root
+                            variant="solid"
+                            size="lg"
+                            alignSelf="flex-end"
+                            checked={!!membershipFee}
+                            onCheckedChange={(e) => onMembershipChange(e.checked)}
+                        >
                             <Checkbox.HiddenInput />
                             <Checkbox.Control />
-                            <Checkbox.Label textStyle="lg">入會費</Checkbox.Label>
+                            <Checkbox.Label textStyle="xl">入會費 <b>{formatNumber(MEMBERSHIP_FEE)}</b></Checkbox.Label>
                         </Checkbox.Root>
                         <Box display="flex" justifyContent="flex-end" gap="16px" mt="1">
                             <Text display="flex" alignItems="center" justifyContent="flex-end" flex="1 1 auto" textStyle="xl">
@@ -139,7 +167,7 @@ const Calculator = ({ total = 25800, points = 2000, itemList = TEST_ITEM_LIST, g
                         </Box>
                     </Box>
                     <Box display="flex" gap="16px" mt="2">
-                        <Button bg="white" size="md" flex="2" variant="outline">
+                        <Button bg="white" size="md" flex="2" variant="outline" onClick={resetForm}>
                             <Text textStyle="lg" color="content.tertiary" letterSpacing="2px">清除</Text>
                         </Button>
                         <Button
@@ -186,7 +214,7 @@ const Calculator = ({ total = 25800, points = 2000, itemList = TEST_ITEM_LIST, g
                     >
                         <Icon as={GiftIcon} size="md" color="white" />
                     </Box>
-                    <GiftInfoSummary giftList={giftList} currentPV={points} />
+                    <GiftInfoSummary giftData={giftData} />
                 </Box>
             </Box>
             <Modal
@@ -194,6 +222,7 @@ const Calculator = ({ total = 25800, points = 2000, itemList = TEST_ITEM_LIST, g
                 isOpen={isModalOpen}
                 setOpen={setModalOpen}
                 title="儲存資料"
+                confirmText="儲存"
             >
                 <Field.Root width="80%" orientation="horizontal">
                     <CustomerNameInput placeholder='陳小麗' />
@@ -208,10 +237,11 @@ const Calculator = ({ total = 25800, points = 2000, itemList = TEST_ITEM_LIST, g
                         訂單内容
                     </Text>
                     <OrderDetail
-                        items={TEST_ORDER_ITEM_LIST}
-                        gift={TEST_GIFT_LIST[2]}
-                        membershipFee={400}
+                        cartItems={cartItems}
+                        gift={giftData?.gift}
+                        membershipFee={membershipFee}
                         showTotal={true}
+                        total={total}
                     />
                 </Box>
             </Modal>

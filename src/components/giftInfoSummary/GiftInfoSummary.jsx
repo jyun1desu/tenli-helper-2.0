@@ -1,7 +1,5 @@
 import React from 'react';
-import { Box, Icon, Text } from '@chakra-ui/react';
-import StarIcon from '@/assets/star.svg?react';
-import getGiftData from '@/utils/getGiftsData.js';
+import { Box, Text } from '@chakra-ui/react';
 import ProgressBar from '../progress-bar/ProgressBar';
 
 const HighlightText = ({ children }) => {
@@ -10,10 +8,10 @@ const HighlightText = ({ children }) => {
     )
 }
 
-const GiftInfoSummary = ({ giftList = [], currentPV = 0 }) => {
-    const { gift, nextGift, pointsToNext, nextGiftProgress } = getGiftData(giftList, currentPV);
-    const { label: giftLabel } = gift || {};
-    const { label: nextGiftLabel } = nextGift || {};
+const GiftInfoSummary = ({ giftData = {} }) => {
+    const { gift, nextGift, pointsToNext, nextGiftProgress } = giftData;
+    const { name: giftLabel } = gift || {};
+    const { name: nextGiftLabel } = nextGift || {};
 
     return (
         <Box>
@@ -25,7 +23,7 @@ const GiftInfoSummary = ({ giftList = [], currentPV = 0 }) => {
                 )}
                 {nextGiftLabel && (
                     <>
-                        ，再 <Text as="b" textStyle="lg">{pointsToNext}PV</Text> 可獲得 <HighlightText as="b">{nextGiftLabel}</HighlightText> ！
+                        {giftLabel ? ', ' : ''}再 <Text as="b" textStyle="lg">{pointsToNext}PV</Text> 可獲得 <HighlightText as="b">{nextGiftLabel}</HighlightText> ！
                     </>
                 )}
             </Text>
