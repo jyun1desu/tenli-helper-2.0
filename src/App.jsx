@@ -108,6 +108,7 @@ function App() {
             onDeleteOrder={deleteOrder}
             saveItem={saveItem}
             importItem={importItem}
+            hasPromotion={PROMOTION_DATA.hasPromotion}
             orderHistoryList={orderHistoryList}
             customerName={customerName}
             onCustomerNameChange={(name) => {
@@ -126,7 +127,11 @@ function App() {
           />
         </Box>
         <Box flex="0 0 auto" zIndex={99}>
-          <Navigator currentPage={currentPage} setCurrentPage={setCurrentPage} />
+          <Navigator
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            hasPromotion={PROMOTION_DATA.hasPromotion}
+          />
         </Box>
       </Box>
     </Box>

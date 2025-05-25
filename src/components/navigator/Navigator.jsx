@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Box } from '@chakra-ui/react';
+import { Box, Text } from '@chakra-ui/react';
 
 import Home from '@/assets/calculator.svg?react';
 import Gift from '@/assets/gift.svg?react';
 import Orders from '@/assets/file.svg?react';
 import AddMember from '@/assets/user-edit.svg?react';
+import Modal from '@/components/modal/Modal.jsx';
 import NavigationButton from './naviation-button/NavigationButton.jsx';
 
 const navsConfig = [{
@@ -15,11 +16,11 @@ const navsConfig = [{
     icon: Gift,
     label: "贈品活動",
     value: 'gift'
-},{
+}, {
     icon: Orders,
     label: "待印表單",
     value: 'orders'
-},{
+}, {
     icon: AddMember,
     label: "填寫入會單",
     value: 'join'
@@ -28,37 +29,61 @@ const navsConfig = [{
 const Navigator = ({
     currentPage = 'home',
     setCurrentPage,
+    hasPromotion = false,
 }) => {
     const [selected, setIsSelected] = useState(currentPage);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         setCurrentPage(selected);
     }, [selected, setCurrentPage]);
 
     return (
-        <Box
-            py="4"
-            px="6"
-            gap="4"
-            background="white"
-            display="flex"
-            justifyContent="space-around"
-            alignItems="center"
-            borderTopLeftRadius="16px"
-            borderTopRightRadius="16px"
-            boxShadow="0 4px 8px rgba(100, 100, 100, 0.2)"
-        >
-            {navsConfig.map((nav) => {
-                return (
-                    <NavigationButton
-                        key={nav.value}
-                        icon={nav.icon}
-                        label={nav.label}
-                        isSelected={selected === nav.value}
-                        onClick={() => { setIsSelected(nav.value) }} />
-                )
-            })}
-        </Box>
+        <>
+            <Box
+                py="4"
+                px="6"
+                gap="4"
+                background="white"
+                display="flex"
+                justifyContent="space-around"
+                alignItems="center"
+                borderTopLeftRadius="16px"
+                borderTopRightRadius="16px"
+                boxShadow="0 4px 8px rgba(100, 100, 100, 0.2)"
+            >
+                {navsConfig.map((nav) => {
+                    return (
+                        <NavigationButton
+                            key={nav.value}
+                            icon={nav.icon}
+                            label={nav.label}
+                            isSelected={selected === nav.value}
+                            onClick={() => {
+                                if (nav.value === 'gift' && !hasPromotion) {
+                                    setIsModalOpen(true)
+                                    return;
+                                }
+                                setIsSelected(nav.value)
+                            }} />
+                    )
+                })}
+            </Box>
+            <Modal
+                id="save-order"
+                isOpen={isModalOpen}
+                setOpen={setIsModalOpen}
+                confirmText="確認"
+                onConfirm={() => {
+                    setIsModalOpen(false)
+                }}
+                showCancelButton={false}
+            >
+                <Text textAlign="center" p="3" mt="4">
+                    尚無活動
+                </Text>
+            </Modal>
+        </>
     )
 };
 

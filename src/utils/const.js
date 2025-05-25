@@ -1,5 +1,5 @@
 export const PROMOTION_DATA = {
-  hasPromotion: false,
+  hasPromotion: true,
   gifts: {
     g01: {
       id: 'g01',

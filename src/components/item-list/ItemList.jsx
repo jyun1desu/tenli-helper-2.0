@@ -32,8 +32,26 @@ const Item = ({
                     </Text>
                 </Box>
                 <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" pt="2" pb="0" flex="1 1 auto">
-                    <Box display="flex" alignItems="center">
+                    <Box display="flex" flexDirection="column" alignItems="center">
                         <Text textStyle="xl" textAlign="center" letterSpacing="2px" px="2px">{name}</Text>
+                        <Text
+                            as="span"
+                            textStyle="xl"
+                            letterSpacing="2px"
+                            px="2px"
+                            fontWeight={600}
+                            color="content.secondary"
+                        >{formatNumber(price)}</Text>
+                        <Text
+                            as="span"
+                            textStyle="md"
+                            letterSpacing="2px"
+                            px="2px"
+                            fontWeight={600}
+                            color="content.tertiary"
+                        >
+                            {formatNumber(pv, false)}PV
+                        </Text>
                     </Box>
                     <Box display="flex" alignItems="center" gap="4px">
                         <Button color="icon.primary" minWidth="unset" p="0" variant="plain" onClick={() => {

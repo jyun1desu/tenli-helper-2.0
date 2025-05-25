@@ -14,11 +14,13 @@ import formatNumber from '@/utils/formatNumber.js';
 import CustomerNameInput from '../../components/customer-name-input/CustomerNameInput.jsx';
 import OrderDetail from '../../components/orderItem/OrderItem.jsx';
 import { MEMBERSHIP_FEE, PRODUCT_DATA, PROMOTION_DATA } from '../../utils/const.js';
+import { useLocalStorage } from '@uidotdev/usehooks';
 
 const Calculator = ({
     cartItems = {},
     total = 0,
     points = 0,
+    hasPromotion = false,
     membershipFee = 0,
     giftData = {},
     customerName,
@@ -29,7 +31,7 @@ const Calculator = ({
     resetForm,
 }) => {
     const [currentFilter, setCurrentFilter] = useState('全部');
-    const [layout, setLayout] = useState(LAYOUT.LIST);
+    const [layout, setLayout] = useLocalStorage('layout', LAYOUT.LIST);
     const [isModalOpen, setModalOpen] = useState(false);
     const [isGiftAreaVisible, setIsGiftAreaVisible] = useState(false);
 
@@ -186,39 +188,41 @@ const Calculator = ({
                         </Button>
                     </Box>
                 </Box>
-                <Box
-                    zIndex={1}
-                    width="100%"
-                    bottom="100%"
-                    left="0"
-                    transform={`translateY(${isGiftAreaVisible ? '0' : '100%'})`}
-                    transition="transform .3s"
-                    position="absolute"
-                    borderBottom="1px solid"
-                    borderStyle="dashed"
-                    borderColor="border.primary"
-                    mt="2"
-                    pt="2"
-                    pb="3"
-                    px="4"
-                    bg="white"
-                >
+                {hasPromotion ? (
                     <Box
-                        bg="bg.tertiary"
-                        borderTopRightRadius="8px"
-                        borderTopLeftRadius="8px"
-                        position="absolute"
+                        zIndex={1}
+                        width="100%"
                         bottom="100%"
                         left="0"
-                        py="1"
-                        height="36px"
+                        transform={`translateY(${isGiftAreaVisible ? '0' : '100%'})`}
+                        transition="transform .3s"
+                        position="absolute"
+                        borderBottom="1px solid"
+                        borderStyle="dashed"
+                        borderColor="border.primary"
+                        mt="2"
+                        pt="2"
+                        pb="3"
                         px="4"
-                        onClick={() => { setIsGiftAreaVisible(pre => !pre) }}
+                        bg="white"
                     >
-                        <Icon as={GiftIcon} size="md" color="white" />
+                        <Box
+                            bg="bg.tertiary"
+                            borderTopRightRadius="8px"
+                            borderTopLeftRadius="8px"
+                            position="absolute"
+                            bottom="100%"
+                            left="0"
+                            py="1"
+                            height="36px"
+                            px="4"
+                            onClick={() => { setIsGiftAreaVisible(pre => !pre) }}
+                        >
+                            <Icon as={GiftIcon} size="md" color="white" />
+                        </Box>
+                        <GiftInfoSummary giftData={giftData} />
                     </Box>
-                    <GiftInfoSummary giftData={giftData} />
-                </Box>
+                ) : null}
             </Box>
             <Modal
                 id="save-order"
@@ -226,7 +230,7 @@ const Calculator = ({
                 setOpen={setModalOpen}
                 title="儲存資料"
                 confirmText="儲存"
-                onConfirm={()=>{
+                onConfirm={() => {
                     saveItem();
                     setModalOpen(false);
                 }}

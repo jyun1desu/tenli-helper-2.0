@@ -9,6 +9,7 @@ const DemoModal = ({
   children,
   confirmText = '確定',
   cancelText = '取消',
+  showCancelButton = true,
   title,
   onConfirm,
 }) => {
@@ -37,16 +38,20 @@ const DemoModal = ({
               {children}
             </Dialog.Body>
             <Dialog.Footer css={{ p: 4, pt: 2 }}>
-              <Dialog.ActionTrigger asChild>
-                <Button letterSpacing="1px" size="lg" variant="outline" color="content.tertiary" textStyle="lg">{cancelText}</Button>
-              </Dialog.ActionTrigger>
-              <Button 
-              letterSpacing="1px" 
-              size="lg" 
-              bg="bg.secondary"
-               textStyle="lg"
-               onClick={onConfirm}
-               >{confirmText}</Button>
+              {
+                showCancelButton ? (
+                  <Dialog.ActionTrigger asChild>
+                    <Button letterSpacing="1px" size="lg" variant="outline" color="content.tertiary" textStyle="lg">{cancelText}</Button>
+                  </Dialog.ActionTrigger>
+                ) : null
+              }
+              <Button
+                letterSpacing="1px"
+                size="lg"
+                bg="bg.secondary"
+                textStyle="lg"
+                onClick={onConfirm}
+              >{confirmText}</Button>
             </Dialog.Footer>
             <Dialog.CloseTrigger asChild>
               <CloseButton size="lg" />
