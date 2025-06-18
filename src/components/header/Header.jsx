@@ -15,7 +15,7 @@ const PAGES_CONFIG = {
         description: '將已儲存的表單匯出為 EXCEL 檔'
     },
     join: {
-        title: '入會單',
+        title: '製作入會單',
         description: '將已儲存的表單匯出為 EXCEL 檔'
     },
 }

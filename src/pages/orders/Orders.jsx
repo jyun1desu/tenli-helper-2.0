@@ -4,7 +4,7 @@ import PencilIcon from '@/assets/pencil.svg?react';
 import DeleteIcon from '@/assets/trash-01.svg?react';
 import ChevronRightIcon from '@/assets/chevron-right.svg?react';
 import formatNumber from '@/utils/formatNumber.js';
-import CustomerNameInput from '@/components/customer-name-input/CustomerNameInput';
+import TextInput from '@/components/text-input/TextInput';
 import OrderDetail from '@/components/orderItem/OrderItem';
 import getGiftsData from '@/utils/getGiftsData';
 import { PRODUCT_DATA, PROMOTION_DATA } from '../../utils/const';
@@ -61,7 +61,7 @@ const OrderItem = ({
         >
             <Text color="content.tertiary" mb="1"><b>{formatTimestampToDateString(timestamp)}</b></Text>
             <Box display="flex" gap="7">
-                <CustomerNameInput value={customerName} onChange={onCustomerNameChange} placeholder='客人姓名' />
+                <TextInput value={customerName} onChange={onCustomerNameChange} placeholder='客人姓名' />
                 <Box display="flex" alignItems="center" gap="2">
                     <Button p="2" bg="bg.highlight" color="content.primary" minWidth="unset" onClick={()=>{
                         importItem(id)

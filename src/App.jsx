@@ -65,6 +65,7 @@ function App() {
   const importItem = (id) => {
     const itemData = orderHistoryList[id];
     setValues(itemData);
+    setCurrentPage('home')
   };
 
   const { items = {}, membershipFee, customerName = '' } = values;

@@ -11,7 +11,7 @@ import GiftInfoSummary from '@/components/giftInfoSummary/GiftInfoSummary.jsx';
 import ItemList, { LAYOUT } from '@/components/item-list/ItemList.jsx';
 import Modal from '@/components/modal/Modal.jsx';
 import formatNumber from '@/utils/formatNumber.js';
-import CustomerNameInput from '../../components/customer-name-input/CustomerNameInput.jsx';
+import TextInput from '../../components/text-input/TextInput.jsx';
 import OrderDetail from '../../components/orderItem/OrderItem.jsx';
 import { MEMBERSHIP_FEE, PRODUCT_DATA, PROMOTION_DATA } from '../../utils/const.js';
 import { useLocalStorage } from '@uidotdev/usehooks';
@@ -91,7 +91,7 @@ const Calculator = ({
                                     bg={isSelected ? "bg.highlight" : "bg.primary"}
                                     color={isSelected ? "content.primary" : "content.primary"}
                                 >
-                                    <Text textStyle="lg" fontWeight={isSelected ? 700 : 500}
+                                    <Text textStyle="lg" letterSpacing="1px" 
                                     >{filter}</Text>
                                 </Button>
                             )
@@ -236,7 +236,7 @@ const Calculator = ({
                 }}
             >
                 <Field.Root width="80%" orientation="horizontal">
-                    <CustomerNameInput value={customerName} onChange={(e) => {
+                    <TextInput value={customerName} onChange={(e) => {
                         onCustomerNameChange(e.target.value)
                     }} placeholder='陳小麗' />
                     <Field.Label letterSpacing="2px" textStyle="2xl" flex="0 0 auto" mr="2">
