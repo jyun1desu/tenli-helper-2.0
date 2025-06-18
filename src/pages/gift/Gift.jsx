@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Box, Heading, Icon, Text } from '@chakra-ui/react';
 import { useTranslation, Trans } from 'react-i18next';
 import AnnouncementIcon from '@/assets/announcement-03.svg?react';
-import CoinsIcon from '@/assets/coins-stacked.svg?react';
+import PVIcon from '@/assets/diamond.svg?react';
 import MoneyIcon from '@/assets/money.svg?react';
 import VerifiedIcon from '@/assets/verified.svg?react';
 import getGiftData from '@/utils/getGiftsData';
@@ -40,7 +40,7 @@ const GiftItem = ({
             </Text>
             <Box display="flex" mt="2">
                 <Text color="content.secondary" display="flex" alignItems="center" gap="1">
-                    <Icon color="icon.secondary" as={CoinsIcon} />
+                    <Icon color="icon.secondary" as={PVIcon} />
                     <Text as="span"><b>{formatNumber(pvCost, false)} PV</b></Text>
                 </Text>
                 <Text color="content.secondary" display="flex" alignItems="center" gap="1" ml="4">
@@ -193,16 +193,16 @@ const Gift = ({
                         textStyle="lg"
                         fontWeight={600}
                         textAlign="center"
-                        bg="bg.secondary"
+                        // bg="bg.secondary"
                         p="2"
-                        color="white"
+                        color="content.primary"
                         letterSpacing="2px"
                     >{t('currentPV')}
                     </Text>
                     <Text
                         flex="2"
                         fontWeight={600}
-                        color="content.primary"
+                        color="content.highlight"
                         textAlign="right"
                         textStyle="xl"
                         letterSpacing="2px"
