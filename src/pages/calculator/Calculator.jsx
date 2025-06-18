@@ -14,7 +14,7 @@ import Modal from '@/components/modal/Modal.jsx';
 import formatNumber from '@/utils/formatNumber.js';
 import TextInput from '../../components/text-input/TextInput.jsx';
 import OrderDetail from '../../components/orderItem/OrderItem.jsx';
-import { MEMBERSHIP_FEE, PRODUCT_DATA, PROMOTION_DATA } from '../../utils/const.js';
+import { MEMBERSHIP_FEE } from '../../utils/const.js';
 import { useLocalStorage } from '@uidotdev/usehooks';
 
 const Calculator = ({
@@ -23,6 +23,7 @@ const Calculator = ({
     points = 0,
     hasPromotion = false,
     membershipFee = 0,
+    productData = {},
     giftData = {},
     customerName,
     onCustomerNameChange,
@@ -39,8 +40,8 @@ const Calculator = ({
     const [isGiftAreaVisible, setIsGiftAreaVisible] = useState(false);
 
     const itemList = useMemo(() => {
-        return Object.values(PRODUCT_DATA).sort((a, b) => a.order - b.order);
-    }, []);
+        return Object.values(productData).sort((a, b) => a.order - b.order);
+    }, [productData]);
 
     const filters = useMemo(() => {
         const lookup = {};

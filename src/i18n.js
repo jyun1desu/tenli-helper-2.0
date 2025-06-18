@@ -12,7 +12,6 @@ const pageModules = import.meta.glob("./pages/**/*.lang.js", {
 
 const modules = { ...componentModules, ...pageModules };
 
-console.log(modules)
 const resources = {
   en: {},
   zh: {},

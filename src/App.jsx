@@ -1,5 +1,6 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Box } from '@chakra-ui/react';
+import { collection, getDocs } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import { useFormik } from 'formik';
 import Navigator from '@/components/navigator/Navigator.jsx';
@@ -8,10 +9,11 @@ import Calculator from '@/pages/calculator/Calculator.jsx'
 import Gift from '@/pages/gift/Gift.jsx'
 import Orders from '@/pages/orders/Orders.jsx'
 import getGiftsData from '@/utils/getGiftsData';
-import { MEMBERSHIP_FEE, PRODUCT_DATA, PROMOTION_DATA } from '@/utils/const';
+import { MEMBERSHIP_FEE } from '@/utils/const';
 import { useLocalStorage } from "@uidotdev/usehooks";
 import JoinForm from './pages/join/JoinForm';
 import Settings from './pages/settings/Settings';
+import { db } from './firebase';
 
 const Content = ({ currentPage, total, points, ...props }) => {
   switch (currentPage) {
@@ -22,7 +24,7 @@ const Content = ({ currentPage, total, points, ...props }) => {
     case 'join':
       return <JoinForm {...props} />
     case 'setting':
-      return <Settings />; 
+      return <Settings />;
     case 'home':
     default:
       return <Calculator total={total} points={points} {...props} />;
@@ -32,6 +34,8 @@ const Content = ({ currentPage, total, points, ...props }) => {
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
   const [orderHistoryList, setOrderHistoryList] = useLocalStorage("orders", {});
+  const [productData, setProductData] = useState({});
+  const [promotionData, setPromotionData] = useState({});
   const { values = {}, setFieldValue, handleReset, setValues } = useFormik({
     initialValues: {
       id: "",
@@ -76,7 +80,7 @@ function App() {
   const { total, points } = useMemo(() => {
     const { total, points } = Object.entries(items).reduce((acc, cur) => {
       const [itemId, itemQuantity] = cur
-      const { price, pv } = PRODUCT_DATA[itemId];
+      const { price, pv } = productData[itemId];
       const total = acc.total + price * itemQuantity;
       const points = acc.points + pv * itemQuantity;
       return {
@@ -85,13 +89,46 @@ function App() {
     }, { total: membershipFee, points: 0 })
 
     return { total, points }
-  }, [items, membershipFee]);
+  }, [items, membershipFee, productData]);
 
   const giftList = useMemo(() => {
-    return Object.values(PROMOTION_DATA.gifts).sort((a, b) => a.value - b.value);
-  }, [])
+    if(!promotionData?.gifts) {
+      return [];
+    }
+    return Object.values(promotionData.gifts).sort((a, b) => a.value - b.value);
+  }, [promotionData])
 
   const giftData = getGiftsData(giftList, points);
+
+  useEffect(() => {
+    const fetchProductData = async () => {
+      const querySnapshot = await getDocs(collection(db, 'Products'));
+      const list = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      const data = list.reduce((acc, cur) => {
+        acc[cur.id] = cur;
+        return acc
+      }, {});
+
+      setProductData(data);
+    };
+
+    const fetchGiftData = async () => {
+      const querySnapshot = await getDocs(collection(db, 'Gifts'));
+      const list = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      const data = list.reduce((acc, cur) => {
+        acc[cur.id] = cur;
+        delete cur.id;
+        return acc
+      }, {});
+
+      setPromotionData(data)
+    };
+
+    fetchProductData();
+    fetchGiftData();
+  }, []);
 
   return (
     <Box fontWeight="500" color="content.primary" width="100dvw" height="100dvh" bg="white">
@@ -108,11 +145,13 @@ function App() {
             membershipFee={membershipFee}
             cartItems={values.items}
             resetForm={handleReset}
+            productData={productData}
+            promotionData={promotionData}
             giftData={giftData}
             onDeleteOrder={deleteOrder}
             saveItem={saveItem}
             importItem={importItem}
-            hasPromotion={PROMOTION_DATA.hasPromotion}
+            hasPromotion={promotionData.hasPromotion?.value}
             orderHistoryList={orderHistoryList}
             customerName={customerName}
             onCustomerNameChange={(name) => {
@@ -134,7 +173,7 @@ function App() {
           <Navigator
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
-            hasPromotion={PROMOTION_DATA.hasPromotion}
+            hasPromotion={promotionData.hasPromotion?.value }
           />
         </Box>
       </Box>

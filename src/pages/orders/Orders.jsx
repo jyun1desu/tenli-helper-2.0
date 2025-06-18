@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Button, Icon, Text, Input, Grid, GridItem } from '@chakra-ui/react';
+import { Box, Button, Icon, Text } from '@chakra-ui/react';
 import PencilIcon from '@/assets/pencil.svg?react';
 import DeleteIcon from '@/assets/trash-01.svg?react';
 import ChevronRightIcon from '@/assets/chevron-right.svg?react';
@@ -8,8 +8,7 @@ import formatNumber from '@/utils/formatNumber.js';
 import TextInput from '@/components/text-input/TextInput';
 import OrderDetail from '@/components/orderItem/OrderItem';
 import getGiftsData from '@/utils/getGiftsData';
-import { PRODUCT_DATA, PROMOTION_DATA } from '../../utils/const';
-import { formatTimestampToDateString } from '../../utils/kk';
+import { formatTimestampToDateString } from '../../utils/formatTimestampToDateString';
 
 
 const OrderItem = ({
@@ -20,6 +19,8 @@ const OrderItem = ({
     onDeleteOrder,
     importItem,
     items = {},
+    productData = {},
+    giftData = {},
     membershipFee = 0,
     isDetailVisible = false,
     setIsDetailVisible,
@@ -30,7 +31,7 @@ const OrderItem = ({
     const { total, points } = useMemo(() => {
         const { total, points } = Object.entries(items).reduce((acc, cur) => {
             const [itemId, itemQuantity] = cur
-            const { price, pv } = PRODUCT_DATA[itemId];
+            const { price, pv } = productData[itemId];
             const total = acc.total + price * itemQuantity;
             const points = acc.points + pv * itemQuantity;
             return {
@@ -42,10 +43,10 @@ const OrderItem = ({
     }, [items, membershipFee]);
 
     const giftList = useMemo(() => {
-        return Object.values(PROMOTION_DATA.gifts).sort((a, b) => a.value - b.value);
+        return Object.values(giftData.gifts).sort((a, b) => a.value - b.value);
     }, [])
 
-    const giftData = getGiftsData(giftList, points);
+    const finalGiftData = getGiftsData(giftList, points);
 
     return (
         <Box
@@ -126,7 +127,7 @@ const OrderItem = ({
                 isDetailVisible ? (
                     <OrderDetail
                         cartItems={items}
-                        gift={giftData.gift}
+                        gift={finalGiftData.gift}
                         membershipFee={membershipFee}
                     />
                 ) : null

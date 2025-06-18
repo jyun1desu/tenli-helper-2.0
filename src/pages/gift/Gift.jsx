@@ -8,7 +8,6 @@ import VerifiedIcon from '@/assets/verified.svg?react';
 import getGiftData from '@/utils/getGiftsData';
 import formatNumber from '@/utils/formatNumber.js';
 import ProgressBar from '../../components/progress-bar/ProgressBar';
-import { PROMOTION_DATA } from '../../utils/const';
 
 const GiftItem = ({
     id,
@@ -17,7 +16,7 @@ const GiftItem = ({
     value,
     progressPercentage,
     pointsNeeded,
-    isCurrentGift
+    isCurrentGift,
 }) => {
     const { t } = useTranslation('gift');
 
@@ -91,13 +90,18 @@ const GiftItem = ({
 
 const Gift = ({
     currentPV = 0,
+    promotionData = {},
 }) => {
+
     const { t } = useTranslation('gift');
     const giftList = useMemo(() => {
-        return Object.values(PROMOTION_DATA.gifts).sort((a, b) => a.value - b.value);
-    }, [])
+        if (!promotionData.gifts) {
+            return [];
+        };
+        return Object.values(promotionData.gifts).sort((a, b) => a.value - b.value);
+    }, [promotionData])
 
-    const activities = [PROMOTION_DATA.event.message];
+    const activities = [promotionData.event.message];
 
     const { gift: currentGift } = getGiftData(giftList, currentPV);
 
@@ -193,7 +197,7 @@ const Gift = ({
                         p="2"
                         color="white"
                         letterSpacing="2px"
-                    >{t('currentPV')} 
+                    >{t('currentPV')}
                     </Text>
                     <Text
                         flex="2"

@@ -11,9 +11,7 @@ const HighlightText = ({ children }) => (
 );
 
 const GiftInfoSummary = ({ giftData = {} }) => {
-    const { t, i18n } = useTranslation('giftInfoSummary');
-
-    console.log(i18n.getResourceBundle(i18n.language, 'giftInfoSummary'));
+    const { t } = useTranslation('giftInfoSummary');
 
     const { gift, nextGift, pointsToNext, nextGiftProgress } = giftData;
     const giftName = gift?.name;
