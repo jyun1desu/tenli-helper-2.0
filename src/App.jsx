@@ -13,6 +13,7 @@ import { useLocalStorage } from "@uidotdev/usehooks";
 import JoinForm from './pages/join/JoinForm';
 import Settings from './pages/settings/Settings';
 import { db } from './firebase';
+import DotLoading from './components/dot-loading/DotLoading';
 
 const Content = ({ currentPage, total, points, ...props }) => {
   switch (currentPage) {
@@ -36,6 +37,7 @@ function App() {
   const [productData, setProductData] = useState({});
   const [promotionData, setPromotionData] = useState({});
   const [defaultMembershipFee, setMembershipFee] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   const { values = {}, setFieldValue, handleReset, setValues } = useFormik({
     initialValues: {
       id: "",
@@ -44,6 +46,10 @@ function App() {
       membershipFee: 0,
     },
   });
+
+  console.log({
+    isLoading
+  })
 
   const clear = () => {
     setOrderHistoryList({})
@@ -92,7 +98,7 @@ function App() {
   }, [items, membershipFee, productData]);
 
   const giftList = useMemo(() => {
-    if(!promotionData?.gifts) {
+    if (!promotionData?.gifts) {
       return [];
     }
     return Object.values(promotionData.gifts).sort((a, b) => a.value - b.value);
@@ -101,92 +107,125 @@ function App() {
   const giftData = getGiftsData(giftList, points);
 
   useEffect(() => {
-    const fetchProductData = async () => {
-      const querySnapshot = await getDocs(collection(db, 'Products'));
-      const list = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const fetchData = async () => {
+      setIsLoading(true);
 
-      const data = list.reduce((acc, cur) => {
-        acc[cur.id] = cur;
-        return acc
-      }, {});
+      try {
+        const fetchProductData = async () => {
+          const querySnapshot = await getDocs(collection(db, 'Products'));
+          const list = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-      setProductData(data);
+          const data = list.reduce((acc, cur) => {
+            acc[cur.id] = cur;
+            return acc;
+          }, {});
+
+          setProductData(data);
+        };
+
+        const fetchGiftData = async () => {
+          const querySnapshot = await getDocs(collection(db, 'Gifts'));
+          const list = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+          const data = list.reduce((acc, cur) => {
+            const { id, ...rest } = cur;
+            acc[id] = rest;
+            return acc;
+          }, {});
+
+          setPromotionData(data);
+        };
+
+        const fetchMembershipFee = async () => {
+          const querySnapshot = await getDocs(collection(db, 'MembershipFee'));
+          const list = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          const fee = list?.[0]?.value || 0;
+          setMembershipFee(fee);
+        };
+
+        await Promise.all([
+          fetchProductData(),
+          fetchGiftData(),
+          fetchMembershipFee(),
+        ]);
+      } catch (error) {
+        console.error("Fetching data failed:", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    const fetchGiftData = async () => {
-      const querySnapshot = await getDocs(collection(db, 'Gifts'));
-      const list = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-      const data = list.reduce((acc, cur) => {
-        acc[cur.id] = cur;
-        delete cur.id;
-        return acc
-      }, {});
-
-      setPromotionData(data)
-    };
-
-    const fetchMembershipFee = async () => {
-      const querySnapshot = await getDocs(collection(db, 'MembershipFee'));
-      const list = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      const fee = list[0].value;
-      setMembershipFee(fee)
-    };
-
-    fetchProductData();
-    fetchGiftData();
-    fetchMembershipFee();
+    fetchData();
   }, []);
 
   return (
-    <Box fontWeight="500" color="content.primary" width="100dvw" height="100dvh" bg="white">
-      <Box bg="bg.primary" display="flex" flexDirection="column" width="100%" height="100%">
-        <Box flex="0 0 auto">
-          <Header currentPage={currentPage} />
-        </Box>
-        <Box flex="1 1 auto" overflow="hidden">
-          <Content
-            currentPage={currentPage}
-            total={total}
-            points={points}
-            clear={clear}
-            membershipFee={membershipFee}
-            cartItems={values.items}
-            resetForm={handleReset}
-            productData={productData}
-            promotionData={promotionData}
-            giftData={giftData}
-            onDeleteOrder={deleteOrder}
-            saveItem={saveItem}
-            importItem={importItem}
-            hasPromotion={promotionData.hasPromotion?.value}
-            orderHistoryList={orderHistoryList}
-            customerName={customerName}
-            defaultMembershipFee={defaultMembershipFee}
-            onCustomerNameChange={(name) => {
-              setFieldValue('customerName', name);
-            }}
-            onMembershipChange={(isChecked) => {
-              setFieldValue('membershipFee', isChecked ? defaultMembershipFee : 0)
-            }}
-            onItemQuantityChange={(id, inputQuantity) => {
-              const toSave = {
-                ...values.items,
-                [id]: inputQuantity
-              };
-              setFieldValue('items', toSave)
-            }}
-          />
-        </Box>
-        <Box flex="0 0 auto" zIndex={99}>
-          <Navigator
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            hasPromotion={promotionData.hasPromotion?.value }
-          />
+    <>
+      <Box fontWeight="500" color="content.primary" width="100dvw" height="100dvh" bg="white">
+        <Box bg="bg.primary" display="flex" flexDirection="column" width="100%" height="100%">
+          <Box flex="0 0 auto">
+            <Header currentPage={currentPage} />
+          </Box>
+          <Box flex="1 1 auto" overflow="hidden">
+            <Content
+              currentPage={currentPage}
+              total={total}
+              points={points}
+              clear={clear}
+              membershipFee={membershipFee}
+              cartItems={values.items}
+              resetForm={handleReset}
+              productData={productData}
+              promotionData={promotionData}
+              giftData={giftData}
+              onDeleteOrder={deleteOrder}
+              saveItem={saveItem}
+              importItem={importItem}
+              hasPromotion={promotionData.hasPromotion?.value}
+              orderHistoryList={orderHistoryList}
+              customerName={customerName}
+              defaultMembershipFee={defaultMembershipFee}
+              onCustomerNameChange={(name) => {
+                setFieldValue('customerName', name);
+              }}
+              onMembershipChange={(isChecked) => {
+                setFieldValue('membershipFee', isChecked ? defaultMembershipFee : 0)
+              }}
+              onItemQuantityChange={(id, inputQuantity) => {
+                const toSave = {
+                  ...values.items,
+                  [id]: inputQuantity
+                };
+                setFieldValue('items', toSave)
+              }}
+            />
+          </Box>
+          <Box flex="0 0 auto" zIndex={99}>
+            <Navigator
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              hasPromotion={promotionData.hasPromotion?.value}
+            />
+          </Box>
         </Box>
       </Box>
-    </Box>
+      {isLoading ? (
+        <Box
+          position="fixed"
+          width="100dvw"
+          height="100dvh"
+          top="0"
+          left="0"
+          bg="bg.primary"
+          opacity="0.85"
+          zIndex="9999"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <DotLoading />
+        </Box>
+      ) : null}
+    </>
   )
 }
 
