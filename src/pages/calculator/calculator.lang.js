@@ -9,7 +9,7 @@ export default {
     saveData: 'Save Order',
     order: "'s Order",
     orderContent: 'Order Details',
-    customerPlaceholder: 'Tenii',
+    customerPlaceholder: 'Lily',
     save: 'Save',
   },
   zh: {

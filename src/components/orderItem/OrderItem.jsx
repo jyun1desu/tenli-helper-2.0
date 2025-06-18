@@ -13,7 +13,10 @@ const OrderDetail = ({
     total = 0,
     showTotal = false,
 }) => {
-    const { t } = useTranslation('orderItem');
+    const { t, i18n } = useTranslation('orderItem');
+
+    const isZh = i18n.language.startsWith('zh');
+    const letterSpacing = isZh ? '2px' : '1px';
 
     const items = Object.entries(cartItems)
         .filter(([, quantity]) => quantity !== 0)
@@ -26,7 +29,7 @@ const OrderDetail = ({
             <Box borderTop="1px solid" borderStyle="dashed" borderColor="border.secondary" mt="2" pt="3">
                 {
                     !items?.length
-                        ? <Text textStyle="lg" letterSpacing="2px" color="content.primary" textAlign="center">
+                        ? <Text textStyle="lg" letterSpacing={letterSpacing} color="content.primary" textAlign="center">
                             {t('noProduct')}
                         </Text>
                         : null
@@ -38,12 +41,12 @@ const OrderDetail = ({
                             return (
                                 <Fragment key={item.id}>
                                     <GridItem>
-                                        <Text textStyle="lg" letterSpacing="2px" color="content.sceondary" textAlign="left">
+                                        <Text textStyle="lg" letterSpacing={letterSpacing} color="content.sceondary" textAlign="left">
                                             {`${seriesNumber} ${name}`}
                                         </Text>
                                     </GridItem>
                                     <GridItem>
-                                        <Text textStyle="lg" letterSpacing="2px" color="content.tertiary" textAlign="right">x <b>{quantity}</b></Text>
+                                        <Text textStyle="lg" letterSpacing={letterSpacing} color="content.tertiary" textAlign="right">x <b>{quantity}</b></Text>
                                     </GridItem>
                                 </Fragment>
                             );
@@ -56,7 +59,7 @@ const OrderDetail = ({
                 <Grid templateColumns="auto 1fr" gap="3" px="3">
                     <GridItem display="flex" alignItems="center" gap="3">
                         <Icon color="icon.primary" size="lg" as={GiftIcon} />
-                        <Text textStyle="lg" letterSpacing="2px" color="content.primary">
+                        <Text textStyle="lg" letterSpacing={letterSpacing} color="content.primary">
                             {gift ? gift.name : t('noGift')}
                         </Text>
                     </GridItem>
@@ -68,7 +71,7 @@ const OrderDetail = ({
                     <Grid templateColumns="2fr 1fr" gap="3" px="3">
                         <GridItem display="flex" alignItems="center" gap="3">
                             <Icon color="icon.primary" size="lg" as={HeartIcon} />
-                            <Text textStyle="lg" letterSpacing="2px" color="content.primary">
+                            <Text textStyle="lg" letterSpacing={letterSpacing} color="content.primary">
                                 {t('membershipFee')}
                             </Text>
                         </GridItem>

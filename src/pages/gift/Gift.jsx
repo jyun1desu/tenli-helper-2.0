@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { Box, Heading, Icon, Text } from '@chakra-ui/react';
+import { useTranslation, Trans } from 'react-i18next';
 import AnnouncementIcon from '@/assets/announcement-03.svg?react';
 import CoinsIcon from '@/assets/coins-stacked.svg?react';
 import MoneyIcon from '@/assets/money.svg?react';
@@ -18,6 +19,8 @@ const GiftItem = ({
     pointsNeeded,
     isCurrentGift
 }) => {
+    const { t } = useTranslation('gift');
+
     return (
         <Box
             flex="0 0 auto"
@@ -43,7 +46,7 @@ const GiftItem = ({
                 </Text>
                 <Text color="content.secondary" display="flex" alignItems="center" gap="1" ml="4">
                     <Icon color="icon.secondary" as={MoneyIcon} />
-                    <Text as="span">價值 <b>{formatNumber(value, true)}</b></Text>
+                    <Text as="span">{t('value')} <b>{formatNumber(value, true)}</b></Text>
                 </Text>
             </Box>
             {isCurrentGift ?
@@ -68,7 +71,16 @@ const GiftItem = ({
             {
                 pointsNeeded ? (
                     <Box display="flex" flexDirection="column" mt="3">
-                        <Text color="content.primary" textAlign="right" mb="1" textStyle="lg">還差 <b>{formatNumber(pointsNeeded, false)} PV</b></Text>
+                        <Text color="content.primary" textAlign="right" mb="1" textStyle="lg">
+                            <Trans
+                                i18nKey="pointsToUnlockGift"
+                                ns="gift"
+                                values={{ points: formatNumber(pointsNeeded, false) }}
+                                components={{
+                                    b: <b />,
+                                }}
+                            />
+                        </Text>
                         <ProgressBar percentage={progressPercentage * 100} height="10px" />
                     </Box>
                 ) : null
@@ -80,6 +92,7 @@ const GiftItem = ({
 const Gift = ({
     currentPV = 0,
 }) => {
+    const { t } = useTranslation('gift');
     const giftList = useMemo(() => {
         return Object.values(PROMOTION_DATA.gifts).sort((a, b) => a.value - b.value);
     }, [])
@@ -131,7 +144,7 @@ const Gift = ({
                         <Box display="flex" flexDirection="column" gap="2" mt="4">
                             <Box display="flex" alignItems="center" gap="2">
                                 <Box flex="1 1 auto" borderTop="2px solid" borderColor="content.tertiary" />
-                                <Text flex="0 0 auto" color="content.tertiary" textAlign="right" textStyle="lg">因達到更高門檻而失效的贈品</Text>
+                                <Text flex="0 0 auto" color="content.tertiary" textAlign="right" textStyle="lg">{t('expiredGifts')}</Text>
                                 <Box flex="1 1 auto" borderTop="2px solid" borderColor="content.tertiary" />
                             </Box>
                             {
@@ -154,7 +167,7 @@ const Gift = ({
                         <Box p="2" bg="white" borderRadius="8px" border="1px solid" borderStyle="dashed" borderColor="border.primary">
                             <Text display="flex" gap="2">
                                 <Icon color="icon.primary" width="28px" height="28px" as={AnnouncementIcon} />
-                                <Text textStyle="xl" as="span" letterSpacing="2px">其他活動</Text>
+                                <Text textStyle="xl" as="span" letterSpacing="2px">{t('otherActivities')}</Text>
                             </Text>
                             <Box ml="4" mt="2">
                                 {
@@ -180,7 +193,7 @@ const Gift = ({
                         p="2"
                         color="white"
                         letterSpacing="2px"
-                    >目前 PV
+                    >{t('currentPV')} 
                     </Text>
                     <Text
                         flex="2"

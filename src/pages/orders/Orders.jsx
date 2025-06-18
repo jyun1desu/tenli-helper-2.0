@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Box, Button, Icon, Text, Input, Grid, GridItem } from '@chakra-ui/react';
 import PencilIcon from '@/assets/pencil.svg?react';
 import DeleteIcon from '@/assets/trash-01.svg?react';
@@ -23,6 +24,7 @@ const OrderItem = ({
     isDetailVisible = false,
     setIsDetailVisible,
 }) => {
+    const { t } = useTranslation('orders');
     const [isButtonReconfirming, setIsButtonReconfirming] = useState(false);
 
     const { total, points } = useMemo(() => {
@@ -61,9 +63,9 @@ const OrderItem = ({
         >
             <Text color="content.tertiary" mb="1"><b>{formatTimestampToDateString(timestamp)}</b></Text>
             <Box display="flex" gap="7">
-                <TextInput value={customerName} onChange={onCustomerNameChange} placeholder='客人姓名' />
+                <TextInput value={customerName} onChange={onCustomerNameChange} placeholder={t('placeholderCustomerName')} />
                 <Box display="flex" alignItems="center" gap="2">
-                    <Button p="2" bg="bg.highlight" color="content.primary" minWidth="unset" onClick={()=>{
+                    <Button p="2" bg="bg.highlight" color="content.primary" minWidth="unset" onClick={() => {
                         importItem(id)
                     }}>
                         <Icon as={PencilIcon} />
@@ -93,7 +95,7 @@ const OrderItem = ({
                                 textStyle="md"
                                 letterSpacing="2px"
                             >
-                                確定刪除
+                                {t('confirmDelete')}
                             </Text>
                         ) : null}
                     </Button>
@@ -115,7 +117,7 @@ const OrderItem = ({
                     gap="1"
                 >
                     <Text as="span" textStyle="md" letterSpacing="1px">
-                        更多細節
+                        {t('moreDetails')}
                     </Text>
                     <Icon as={ChevronRightIcon} transform={isDetailVisible ? 'rotate(90deg)' : 'rotate(0)'} transition=".3s" />
                 </Box>
@@ -140,6 +142,7 @@ const Orders = ({
     onCustomerNameChange,
     orderHistoryList = {},
 }) => {
+    const { t } = useTranslation('orders');
     const [isButtonReconfirming, setIsButtonReconfirming] = useState(false);
     const [showingDetailItemId, setShowingDetailItemId] = useState('');
     const orderItems = Object.values(orderHistoryList) || [];
@@ -190,7 +193,7 @@ const Orders = ({
                     }}
                     color={isButtonReconfirming ? "white" : "content.tertiary"}
                 >
-                    <Text textStyle="xl" letterSpacing="2px">{isButtonReconfirming ? '確定清除' : '清除全部'}</Text>
+                    <Text textStyle="xl" letterSpacing="2px">{isButtonReconfirming ? t('confirmClearAll') : t('clearAll')}</Text>
                 </Button>
             </Box>
         </Box>

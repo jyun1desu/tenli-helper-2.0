@@ -46,7 +46,7 @@ export const PRODUCT_DATA = {
   j001: {
     id: 'j001',
     pv: 1700,
-    name: "雙效潔顏露",
+    name: "雙效潔顔露",
     series: SERIES.JOLI,
     seriesNumber: "01",
     price: 1995,

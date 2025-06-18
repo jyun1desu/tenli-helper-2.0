@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Text } from '@chakra-ui/react';
 import { useTranslation, Trans } from 'react-i18next';
 import ProgressBar from '../progress-bar/ProgressBar';
+import formatNumber from '@/utils/formatNumber.js';
 
 const HighlightText = ({ children }) => (
     <Text as="span" bg="bg.highlight" borderRadius="50px" px="1" display="inline">
@@ -33,7 +34,7 @@ const GiftInfoSummary = ({ giftData = {} }) => {
                         <Trans
                             i18nKey="nextGift"
                             ns="giftInfoSummary"
-                            values={{ points: pointsToNext, gift: nextGiftName }}
+                            values={{ points: formatNumber(pointsToNext, false), gift: nextGiftName }}
                             components={{
                                 b: <b />,
                                 highlight: <HighlightText as="b" />,
