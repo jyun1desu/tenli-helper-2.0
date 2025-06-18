@@ -17,8 +17,6 @@ import OrderDetail from '../../components/orderItem/OrderItem.jsx';
 import { MEMBERSHIP_FEE, PRODUCT_DATA, PROMOTION_DATA } from '../../utils/const.js';
 import { useLocalStorage } from '@uidotdev/usehooks';
 
-const DEFAULT_FILTER = 'ALL';
-
 const Calculator = ({
     cartItems = {},
     total = 0,
@@ -33,11 +31,12 @@ const Calculator = ({
     saveItem,
     resetForm,
 }) => {
-    const [currentFilter, setCurrentFilter] = useState(DEFAULT_FILTER);
+    const { t } = useTranslation('calculator');
+    const defaultFilter = t('all');
+    const [currentFilter, setCurrentFilter] = useState(t('all'));
     const [layout, setLayout] = useLocalStorage('layout', LAYOUT.LIST);
     const [isModalOpen, setModalOpen] = useState(false);
     const [isGiftAreaVisible, setIsGiftAreaVisible] = useState(false);
-    const { t } = useTranslation('calculator');
 
     const itemList = useMemo(() => {
         return Object.values(PRODUCT_DATA).sort((a, b) => a.order - b.order);
@@ -45,7 +44,7 @@ const Calculator = ({
 
     const filters = useMemo(() => {
         const lookup = {};
-        const filters = [DEFAULT_FILTER];
+        const filters = [defaultFilter];
 
         itemList.forEach(item => {
             if (!lookup[item.series]) {
@@ -58,7 +57,7 @@ const Calculator = ({
     }, [itemList]);
 
     const displayList = useMemo(() => {
-        if (currentFilter !== DEFAULT_FILTER) {
+        if (currentFilter !== defaultFilter) {
             return itemList.filter(item => item.series === currentFilter)
         }
         return itemList;
@@ -71,9 +70,8 @@ const Calculator = ({
             width="100%"
             height="100%"
         >
-            <Box display="flex" flex="0 0 auto" bg="white" pt="3" pb="2" px="4">
+            <Box display="flex" alignItems="flex-end" flex="0 0 auto" bg="white" pt="3" pb="2" px="4" height="80px">
                 <Box>
-                    <Text mb="1">{t('filter')}</Text>
                     <Box display="flex" gap="2" alignItems="center">
                         {filters.map(filter => {
                             const isSelected = currentFilter === filter;
@@ -86,11 +84,11 @@ const Calculator = ({
                                     px="5"
                                     height="auto"
                                     onClick={() => {
-                                        if (filter === DEFAULT_FILTER) {
-                                            setCurrentFilter(DEFAULT_FILTER);
+                                        if (filter === defaultFilter) {
+                                            setCurrentFilter(defaultFilter);
                                             return;
                                         }
-                                        setCurrentFilter(isSelected ? DEFAULT_FILTER : filter)
+                                        setCurrentFilter(isSelected ? defaultFilter : filter)
                                     }}
                                     bg={isSelected ? "bg.highlight" : "bg.primary"}
                                     color={isSelected ? "content.primary" : "content.primary"}
