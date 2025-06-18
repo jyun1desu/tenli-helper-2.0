@@ -238,7 +238,7 @@ const Calculator = ({
                 <Field.Root width="80%" orientation="horizontal">
                     <TextInput value={customerName} onChange={(e) => {
                         onCustomerNameChange(e.target.value)
-                    }} placeholder='陳小麗' />
+                    }} placeholder='小麗' />
                     <Field.Label letterSpacing="2px" textStyle="2xl" flex="0 0 auto" mr="2">
                         的訂單
                         <Icon as={MagicWand} />

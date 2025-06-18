@@ -11,19 +11,23 @@ import NavigationButton from './naviation-button/NavigationButton.jsx';
 const navsConfig = [{
     icon: Home,
     label: "計算機",
-    value: 'home'
+    value: 'home',
+    enabled: true,
 }, {
     icon: Gift,
     label: "贈品活動",
-    value: 'gift'
+    value: 'gift',
+    enabled: true,
 }, {
     icon: Orders,
     label: "待印表單",
-    value: 'orders'
+    value: 'orders',
+    enabled: true,
 }, {
     icon: AddMember,
     label: "填寫入會單",
-    value: 'join'
+    value: 'join',
+    enabled: false,
 }];
 
 const Navigator = ({
@@ -52,7 +56,7 @@ const Navigator = ({
                 borderTopRightRadius="16px"
                 boxShadow="0 4px 8px rgba(100, 100, 100, 0.2)"
             >
-                {navsConfig.map((nav) => {
+                {navsConfig.filter(nav => nav.enabled).map((nav) => {
                     return (
                         <NavigationButton
                             key={nav.value}
