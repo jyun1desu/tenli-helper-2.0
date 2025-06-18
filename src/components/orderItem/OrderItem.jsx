@@ -3,12 +3,12 @@ import { Box, Icon, Text, Grid, GridItem } from '@chakra-ui/react';
 import GiftIcon from '@/assets/gift.svg?react';
 import HeartIcon from '@/assets/heart-rounded.svg?react';
 import formatNumber from '@/utils/formatNumber.js';
-import { PRODUCT_DATA } from '../../utils/const';
 import { useTranslation } from 'react-i18next';
 
 const OrderDetail = ({
     cartItems = [],
     gift,
+    productData = {},
     membershipFee = 0,
     total = 0,
     showTotal = false,
@@ -21,7 +21,7 @@ const OrderDetail = ({
     const items = Object.entries(cartItems)
         .filter(([, quantity]) => quantity !== 0)
         .map(([itemId, quantity]) => {
-            return { ...PRODUCT_DATA[itemId], quantity }
+            return { ...productData[itemId], quantity }
         });
 
     return (

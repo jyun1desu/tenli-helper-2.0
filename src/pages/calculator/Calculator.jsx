@@ -14,7 +14,6 @@ import Modal from '@/components/modal/Modal.jsx';
 import formatNumber from '@/utils/formatNumber.js';
 import TextInput from '../../components/text-input/TextInput.jsx';
 import OrderDetail from '../../components/orderItem/OrderItem.jsx';
-import { MEMBERSHIP_FEE } from '../../utils/const.js';
 import { useLocalStorage } from '@uidotdev/usehooks';
 
 const Calculator = ({
@@ -23,6 +22,7 @@ const Calculator = ({
     points = 0,
     hasPromotion = false,
     membershipFee = 0,
+    defaultMembershipFee = 0,
     productData = {},
     giftData = {},
     customerName,
@@ -161,7 +161,7 @@ const Calculator = ({
                             <Checkbox.Control />
                             <Checkbox.Label textStyle="xl">
                                 <Text as="span" mr="4">{t('membershipFee')}</Text>
-                                <b>{formatNumber(MEMBERSHIP_FEE)}</b>
+                                <b>{formatNumber(defaultMembershipFee)}</b>
                             </Checkbox.Label>
                         </Checkbox.Root>
                         <Box display="flex" justifyContent="flex-end" gap="16px" mt="1">
@@ -256,6 +256,7 @@ const Calculator = ({
                         {t('orderContent')}
                     </Text>
                     <OrderDetail
+                        productData={productData}
                         cartItems={cartItems}
                         gift={giftData?.gift}
                         membershipFee={membershipFee}

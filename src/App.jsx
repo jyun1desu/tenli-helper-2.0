@@ -9,7 +9,6 @@ import Calculator from '@/pages/calculator/Calculator.jsx'
 import Gift from '@/pages/gift/Gift.jsx'
 import Orders from '@/pages/orders/Orders.jsx'
 import getGiftsData from '@/utils/getGiftsData';
-import { MEMBERSHIP_FEE } from '@/utils/const';
 import { useLocalStorage } from "@uidotdev/usehooks";
 import JoinForm from './pages/join/JoinForm';
 import Settings from './pages/settings/Settings';
@@ -36,6 +35,7 @@ function App() {
   const [orderHistoryList, setOrderHistoryList] = useLocalStorage("orders", {});
   const [productData, setProductData] = useState({});
   const [promotionData, setPromotionData] = useState({});
+  const [defaultMembershipFee, setMembershipFee] = useState(0);
   const { values = {}, setFieldValue, handleReset, setValues } = useFormik({
     initialValues: {
       id: "",
@@ -126,8 +126,16 @@ function App() {
       setPromotionData(data)
     };
 
+    const fetchMembershipFee = async () => {
+      const querySnapshot = await getDocs(collection(db, 'MembershipFee'));
+      const list = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const fee = list[0].value;
+      setMembershipFee(fee)
+    };
+
     fetchProductData();
     fetchGiftData();
+    fetchMembershipFee();
   }, []);
 
   return (
@@ -158,7 +166,7 @@ function App() {
               setFieldValue('customerName', name);
             }}
             onMembershipChange={(isChecked) => {
-              setFieldValue('membershipFee', isChecked ? MEMBERSHIP_FEE : 0)
+              setFieldValue('membershipFee', isChecked ? defaultMembershipFee : 0)
             }}
             onItemQuantityChange={(id, inputQuantity) => {
               const toSave = {

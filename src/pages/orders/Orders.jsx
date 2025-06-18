@@ -129,6 +129,7 @@ const OrderItem = ({
             {
                 isDetailVisible ? (
                     <OrderDetail
+                        productData={productData}
                         cartItems={items}
                         gift={finalGiftData.gift}
                         membershipFee={membershipFee}
