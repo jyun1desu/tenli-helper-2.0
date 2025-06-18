@@ -17,7 +17,8 @@ body {
   display: flex;
   place-items: center;
   min-width: 320px;
-  min-height: 100vh;
+  min-height: 100dvh;
+  max-height: 100dvh;
   background-color: #c7bb78;
   display: flex;
   align-items: center;
