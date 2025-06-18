@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Box, Text } from '@chakra-ui/react';
 
 import Home from '@/assets/calculator.svg?react';
@@ -41,12 +41,7 @@ const Navigator = ({
     setCurrentPage,
     hasPromotion = false,
 }) => {
-    const [selected, setIsSelected] = useState(currentPage);
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-    useEffect(() => {
-        setCurrentPage(selected);
-    }, [selected, setCurrentPage]);
 
     return (
         <>
@@ -68,13 +63,13 @@ const Navigator = ({
                             key={nav.value}
                             icon={nav.icon}
                             label={nav.label}
-                            isSelected={selected === nav.value}
+                            isSelected={currentPage === nav.value}
                             onClick={() => {
                                 if (nav.value === 'gift' && !hasPromotion) {
                                     setIsModalOpen(true)
                                     return;
                                 }
-                                setIsSelected(nav.value)
+                                setCurrentPage(nav.value)
                             }} />
                     )
                 })}
