@@ -47,10 +47,6 @@ function App() {
     },
   });
 
-  console.log({
-    isLoading
-  })
-
   const clear = () => {
     setOrderHistoryList({})
   }
