@@ -22,7 +22,6 @@ const namespaces = [];
 for (const path in modules) {
   const langData = modules[path].default;
 
-  // 取出 components 或 pages 資料夾後面的第一個子資料夾當 namespace
   const match = path.match(/(components|pages)\/([^/]+)\/.+\.lang\.js$/);
   const namespace = match?.[2] || "common";
 

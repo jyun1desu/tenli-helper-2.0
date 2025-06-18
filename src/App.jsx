@@ -162,6 +162,7 @@ function App() {
             hasPromotion={promotionData.hasPromotion?.value}
             orderHistoryList={orderHistoryList}
             customerName={customerName}
+            defaultMembershipFee={defaultMembershipFee}
             onCustomerNameChange={(name) => {
               setFieldValue('customerName', name);
             }}

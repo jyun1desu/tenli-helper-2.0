@@ -6,11 +6,11 @@ import CheckIcon from '@/assets/check.svg?react';
 const OPTIONS = [
   {
     label: '中文',
-    value: 'zh',
+    value: ['zh', 'zh-TW'],
   },
   {
     label: 'English',
-    value: 'en',
+    value: ['en', 'en-US'],
   },
 ];
 
@@ -31,7 +31,7 @@ const LanguageSelector = () => {
       borderColor="bg.grey"
     >
       {OPTIONS.map((option, index) => {
-        const isCurrent = option.value === i18n.language;
+        const isCurrent = option.value.includes(i18n.language);
         return (
           <Button
             justifyContent="flex-start"
@@ -47,7 +47,7 @@ const LanguageSelector = () => {
             size="2xl"
             onClick={() => changeLanguage(option.value)}
           >
-            {option.value === i18n.language ? <CheckIcon /> : null} {option.label}
+            {isCurrent ? <CheckIcon /> : null} {option.label}
           </Button>
         )
       })}
