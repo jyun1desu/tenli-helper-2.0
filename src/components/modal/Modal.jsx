@@ -1,18 +1,22 @@
 "use client"
 
 import { Button, Dialog, Portal, CloseButton } from "@chakra-ui/react"
+import { useTranslation } from "react-i18next"
+
 
 const DemoModal = ({
   id,
   isOpen,
   setOpen,
   children,
-  confirmText = '確定',
-  cancelText = '取消',
+  confirmText,
+  cancelText,
   showCancelButton = true,
   title,
   onConfirm,
 }) => {
+  const { t } = useTranslation('modal');
+
   return (
     <Dialog.Root
       id={id}
@@ -41,7 +45,7 @@ const DemoModal = ({
               {
                 showCancelButton ? (
                   <Dialog.ActionTrigger asChild>
-                    <Button letterSpacing="1px" size="lg" variant="outline" color="content.tertiary" textStyle="lg">{cancelText}</Button>
+                    <Button letterSpacing="1px" size="lg" variant="outline" color="content.tertiary" textStyle="lg">{cancelText || t('cancel')}</Button>
                   </Dialog.ActionTrigger>
                 ) : null
               }
@@ -51,7 +55,7 @@ const DemoModal = ({
                 bg="bg.secondary"
                 textStyle="lg"
                 onClick={onConfirm}
-              >{confirmText}</Button>
+              >{confirmText || t('confirm')}</Button>
             </Dialog.Footer>
             <Dialog.CloseTrigger asChild>
               <CloseButton size="lg" />

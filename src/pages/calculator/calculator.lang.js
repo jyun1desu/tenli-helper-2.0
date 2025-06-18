@@ -1,0 +1,28 @@
+export default {
+  en: {
+    filter: 'Choose Series',
+    all: 'All',
+    membershipFee: 'Membership Fee',
+    pv: 'PV',
+    total: 'TOTAL',
+    clear: 'Clear',
+    saveData: 'Save Order',
+    order: "'s Order",
+    orderContent: 'Order Details',
+    customerPlaceholder: 'Tenii',
+    save: 'Save',
+  },
+  zh: {
+    filter: '篩選系列',
+    all: '全部',
+    membershipFee: '入會費',
+    pv: 'PV',
+    total: '合計',
+    clear: '清除',
+    saveData: '儲存訂單',
+    order: '的訂單',
+    orderContent: '訂單内容',
+    customerPlaceholder: '小麗',
+    save: '儲存',
+  },
+};

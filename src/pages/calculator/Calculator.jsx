@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Box, Button, Checkbox, Field, Icon, Input, Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import PVIcon from '@/assets/diamond.svg?react';
 import ReceiptIcon from '@/assets/receipt-check.svg?react';
 import GiftIcon from '@/assets/gift.svg?react';
@@ -16,6 +17,8 @@ import OrderDetail from '../../components/orderItem/OrderItem.jsx';
 import { MEMBERSHIP_FEE, PRODUCT_DATA, PROMOTION_DATA } from '../../utils/const.js';
 import { useLocalStorage } from '@uidotdev/usehooks';
 
+const DEFAULT_FILTER = 'ALL';
+
 const Calculator = ({
     cartItems = {},
     total = 0,
@@ -30,10 +33,11 @@ const Calculator = ({
     saveItem,
     resetForm,
 }) => {
-    const [currentFilter, setCurrentFilter] = useState('全部');
+    const [currentFilter, setCurrentFilter] = useState(DEFAULT_FILTER);
     const [layout, setLayout] = useLocalStorage('layout', LAYOUT.LIST);
     const [isModalOpen, setModalOpen] = useState(false);
     const [isGiftAreaVisible, setIsGiftAreaVisible] = useState(false);
+    const { t } = useTranslation('calculator');
 
     const itemList = useMemo(() => {
         return Object.values(PRODUCT_DATA).sort((a, b) => a.order - b.order);
@@ -41,7 +45,7 @@ const Calculator = ({
 
     const filters = useMemo(() => {
         const lookup = {};
-        const filters = ['全部'];
+        const filters = [DEFAULT_FILTER];
 
         itemList.forEach(item => {
             if (!lookup[item.series]) {
@@ -54,7 +58,7 @@ const Calculator = ({
     }, [itemList]);
 
     const displayList = useMemo(() => {
-        if (currentFilter !== '全部') {
+        if (currentFilter !== DEFAULT_FILTER) {
             return itemList.filter(item => item.series === currentFilter)
         }
         return itemList;
@@ -69,7 +73,7 @@ const Calculator = ({
         >
             <Box display="flex" flex="0 0 auto" bg="white" pt="3" pb="2" px="4">
                 <Box>
-                    <Text mb="1">篩選系列</Text>
+                    <Text mb="1">{t('filter')}</Text>
                     <Box display="flex" gap="2" alignItems="center">
                         {filters.map(filter => {
                             const isSelected = currentFilter === filter;
@@ -82,16 +86,16 @@ const Calculator = ({
                                     px="5"
                                     height="auto"
                                     onClick={() => {
-                                        if (filter === '全部') {
-                                            setCurrentFilter('全部');
+                                        if (filter === DEFAULT_FILTER) {
+                                            setCurrentFilter(DEFAULT_FILTER);
                                             return;
                                         }
-                                        setCurrentFilter(isSelected ? '全部' : filter)
+                                        setCurrentFilter(isSelected ? DEFAULT_FILTER : filter)
                                     }}
                                     bg={isSelected ? "bg.highlight" : "bg.primary"}
                                     color={isSelected ? "content.primary" : "content.primary"}
                                 >
-                                    <Text textStyle="lg" letterSpacing="1px" 
+                                    <Text textStyle="lg" letterSpacing="1px"
                                     >{filter}</Text>
                                 </Button>
                             )
@@ -156,24 +160,27 @@ const Calculator = ({
                         >
                             <Checkbox.HiddenInput />
                             <Checkbox.Control />
-                            <Checkbox.Label textStyle="xl">入會費 <b>{formatNumber(MEMBERSHIP_FEE)}</b></Checkbox.Label>
+                            <Checkbox.Label textStyle="xl">
+                                <Text as="span" mr="4">{t('membershipFee')}</Text>
+                                <b>{formatNumber(MEMBERSHIP_FEE)}</b>
+                            </Checkbox.Label>
                         </Checkbox.Root>
                         <Box display="flex" justifyContent="flex-end" gap="16px" mt="1">
                             <Text display="flex" alignItems="center" justifyContent="flex-end" flex="1 1 auto" textStyle="xl">
                                 <Icon mr="1" color="icon.primary" size="s" as={PVIcon} />
-                                <Text as="span" color="content.secondary" mr="3">PV</Text>
+                                <Text as="span" color="content.secondary" mr="3">{t('PV')}</Text>
                                 <Text as="span" fontWeight={600}>{`  ${formatNumber(points, false)}`}</Text>
                             </Text>
                             <Text display="flex" alignItems="center" justifyContent="flex-end" flex="0 1 auto" textStyle="xl">
                                 <Icon mr="1" color="icon.primary" size="s" as={ReceiptIcon} />
-                                <Text as="span" mr="3">合計</Text>
+                                <Text as="span" mr="3">{t('total')}</Text>
                                 <Text as="span" fontWeight={600}>{` ${formatNumber(total)}`}</Text>
                             </Text>
                         </Box>
                     </Box>
                     <Box display="flex" gap="16px" mt="2">
                         <Button bg="white" size="md" flex="2" variant="outline" onClick={resetForm}>
-                            <Text textStyle="lg" color="content.tertiary" letterSpacing="2px">清除</Text>
+                            <Text textStyle="lg" color="content.tertiary" letterSpacing="2px">{t('clear')}</Text>
                         </Button>
                         <Button
                             onClick={() => {
@@ -184,7 +191,7 @@ const Calculator = ({
                             flex="5"
                             disabled={total === 0}
                         >
-                            <Text textStyle="lg" letterSpacing="2px">儲存資料</Text>
+                            <Text textStyle="lg" letterSpacing="2px">{t('saveData')}</Text>
                         </Button>
                     </Box>
                 </Box>
@@ -228,8 +235,8 @@ const Calculator = ({
                 id="save-order"
                 isOpen={isModalOpen}
                 setOpen={setModalOpen}
-                title="儲存資料"
-                confirmText="儲存"
+                title={t('saveData')}
+                confirmText={t('save')}
                 onConfirm={() => {
                     saveItem();
                     setModalOpen(false);
@@ -238,16 +245,16 @@ const Calculator = ({
                 <Field.Root width="80%" orientation="horizontal">
                     <TextInput value={customerName} onChange={(e) => {
                         onCustomerNameChange(e.target.value)
-                    }} placeholder='小麗' />
+                    }} placeholder={t('customerPlaceholder')} />
                     <Field.Label letterSpacing="2px" textStyle="2xl" flex="0 0 auto" mr="2">
-                        的訂單
+                        {t('order')}
                         <Icon as={MagicWand} />
                     </Field.Label>
                 </Field.Root>
                 <Box borderRadius="8px" border="1px solid" borderStyle="dashed" borderColor="border.secondary" p="3" mt="4">
                     <Text textStyle="lg" letterSpacing="2px" display="flex" alignItems="center" gap="2">
                         <Icon color="icon.primary" as={ShoppingBagIcon} />
-                        訂單内容
+                        {t('orderContent')}
                     </Text>
                     <OrderDetail
                         cartItems={cartItems}

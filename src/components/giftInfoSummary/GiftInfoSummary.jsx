@@ -1,36 +1,50 @@
 import React from 'react';
 import { Box, Text } from '@chakra-ui/react';
+import { useTranslation, Trans } from 'react-i18next';
 import ProgressBar from '../progress-bar/ProgressBar';
 
-const HighlightText = ({ children }) => {
-    return (
-        <Text as="span" bg="bg.highlight" borderRadius="50px" px="1" display="inline">{children}</Text>
-    )
-}
+const HighlightText = ({ children }) => (
+    <Text as="span" bg="bg.highlight" borderRadius="50px" px="1" display="inline">
+        {children}
+    </Text>
+);
 
 const GiftInfoSummary = ({ giftData = {} }) => {
+    const { t, i18n } = useTranslation('giftInfoSummary');
+
+    console.log(i18n.getResourceBundle(i18n.language, 'giftInfoSummary'));
+
     const { gift, nextGift, pointsToNext, nextGiftProgress } = giftData;
-    const { name: giftLabel } = gift || {};
-    const { name: nextGiftLabel } = nextGift || {};
+    const giftName = gift?.name;
+    const nextGiftName = nextGift?.name;
 
     return (
         <Box>
             <Text letterSpacing="1px" textStyle="md" mb="2" whiteSpace="pre-line" lineHeight={1.2}>
-                {giftLabel && (
+                {giftName && (
                     <>
-                        已獲得 <HighlightText>{giftLabel}</HighlightText>{nextGiftLabel ? '' : ' ！'}
+                        {t('got')} <HighlightText>{giftName}</HighlightText>
+                        {!nextGiftName ? t('exclamation') : ''}
                     </>
                 )}
-                {nextGiftLabel && (
+                {nextGiftName && (
                     <>
-                        {giftLabel ? ', ' : ''}再 <Text as="b" textStyle="lg">{pointsToNext}PV</Text> 可獲得 <HighlightText as="b">{nextGiftLabel}</HighlightText> ！
+                        {giftName ? ', ' : ''}
+                        <Trans
+                            i18nKey="nextGift"
+                            ns="giftInfoSummary"
+                            values={{ points: pointsToNext, gift: nextGiftName }}
+                            components={{
+                                b: <b />,
+                                highlight: <HighlightText as="b" />,
+                            }}
+                        />
                     </>
                 )}
             </Text>
             <ProgressBar percentage={nextGiftProgress} />
         </Box>
-    )
+    );
 };
 
 export default GiftInfoSummary;
-
