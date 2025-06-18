@@ -43,6 +43,8 @@ const LanguageSelector = () => {
             borderRadius="0"
             color="content.primary"
             fontWeight={isCurrent ? 600 : 500}
+            textStyle="xl"
+            size="2xl"
             onClick={() => changeLanguage(option.value)}
           >
             {option.value === i18n.language ? <CheckIcon /> : null} {option.label}

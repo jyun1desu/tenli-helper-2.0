@@ -20,14 +20,14 @@ const OrderItem = ({
     importItem,
     items = {},
     productData = {},
-    giftData = {},
+    promotionData = {},
     membershipFee = 0,
     isDetailVisible = false,
     setIsDetailVisible,
 }) => {
-    const { t } = useTranslation('orders');
+    const { t, i18n } = useTranslation('orders');
     const [isButtonReconfirming, setIsButtonReconfirming] = useState(false);
-
+    const isZh = i18n.language.startsWith('zh');
     const { total, points } = useMemo(() => {
         const { total, points } = Object.entries(items).reduce((acc, cur) => {
             const [itemId, itemQuantity] = cur
@@ -40,11 +40,14 @@ const OrderItem = ({
         }, { total: membershipFee, points: 0 })
 
         return { total, points }
-    }, [items, membershipFee]);
+    }, [items, membershipFee, productData]);
 
     const giftList = useMemo(() => {
-        return Object.values(giftData.gifts).sort((a, b) => a.value - b.value);
-    }, [])
+        if (!promotionData.gifts) {
+            return [];
+        }
+        return Object.values(promotionData.gifts).sort((a, b) => a.value - b.value);
+    }, [promotionData])
 
     const finalGiftData = getGiftsData(giftList, points);
 
@@ -117,7 +120,7 @@ const OrderItem = ({
                     alignItems="center"
                     gap="1"
                 >
-                    <Text as="span" textStyle="md" letterSpacing="1px">
+                    <Text as="span" textStyle="lg" letterSpacing={isZh ? '1px' : 0} fontWeight={isZh ? 500 : 600}>
                         {t('moreDetails')}
                     </Text>
                     <Icon as={ChevronRightIcon} transform={isDetailVisible ? 'rotate(90deg)' : 'rotate(0)'} transition=".3s" />
@@ -140,6 +143,8 @@ const Orders = ({
     onDeleteOrder,
     clear,
     importItem,
+    productData = {},
+    promotionData = {},
     onCustomerNameChange,
     orderHistoryList = {},
 }) => {
@@ -159,6 +164,8 @@ const Orders = ({
                                 key={id}
                                 id={id}
                                 onDeleteOrder={onDeleteOrder}
+                                productData={productData}
+                                promotionData={promotionData}
                                 timestamp={timestamp}
                                 onCustomerNameChange={onCustomerNameChange}
                                 customerName={customerName}
