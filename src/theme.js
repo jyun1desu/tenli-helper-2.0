@@ -8,6 +8,7 @@ const customConfig = defineConfig({
             primary: "#f6fafa",
             secondary: "#7dcc94",
             tertiary: "#fdc088",
+            grey: "#f8f8f8",
             highlight: "#faf3d8",
             pink: "#fcc6c6",
             green2: "#cfd696",

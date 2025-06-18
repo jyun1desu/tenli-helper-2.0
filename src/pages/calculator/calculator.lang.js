@@ -1,6 +1,6 @@
 export default {
   en: {
-    filter: 'Choose Series',
+    filter: 'Series',
     all: 'All',
     membershipFee: 'Membership Fee',
     pv: 'PV',
@@ -13,7 +13,7 @@ export default {
     save: 'Save',
   },
   zh: {
-    filter: '篩選系列',
+    filter: '系列',
     all: '全部',
     membershipFee: '入會費',
     pv: 'PV',

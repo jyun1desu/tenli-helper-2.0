@@ -11,6 +11,7 @@ import getGiftsData from '@/utils/getGiftsData';
 import { MEMBERSHIP_FEE, PRODUCT_DATA, PROMOTION_DATA } from '@/utils/const';
 import { useLocalStorage } from "@uidotdev/usehooks";
 import JoinForm from './pages/join/JoinForm';
+import Settings from './pages/settings/Settings';
 
 const Content = ({ currentPage, total, points, ...props }) => {
   switch (currentPage) {
@@ -20,6 +21,8 @@ const Content = ({ currentPage, total, points, ...props }) => {
       return <Orders {...props} />;
     case 'join':
       return <JoinForm {...props} />
+    case 'setting':
+      return <Settings />; 
     case 'home':
     default:
       return <Calculator total={total} points={points} {...props} />;

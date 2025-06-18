@@ -5,6 +5,7 @@ export default {
       gift: '贈品與活動',
       orders: '已儲存訂單',
       join: '製作入會單',
+      setting: '設定'
     },
     description: {
       home: '快速計算商品總價與 PV 點數',
@@ -19,6 +20,7 @@ export default {
       gift: 'Gifts & Promotions',
       orders: 'Orders',
       join: 'Join Form',
+      setting: 'Settings'
     },
     description: {
       home: 'Quickly calculate total price and PV points',

@@ -14,7 +14,7 @@ const Header = ({ currentPage }) => {
   return (
     <Box display="flex" bg="white" pt="4" pb="3" px="4" height="80px">
       <Heading
-        mt="auto"
+        mt="0"
         textAlign="left"
         color="content.highlight"
         size="3xl"
