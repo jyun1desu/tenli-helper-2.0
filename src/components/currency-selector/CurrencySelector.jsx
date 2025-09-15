@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Button } from '@chakra-ui/react';
-import { useTranslation } from 'react-i18next';
 import CheckIcon from '@/assets/check.svg?react';
 
 const CURRENCY_OPTIONS = [
@@ -17,8 +16,6 @@ const CURRENCY_OPTIONS = [
 ];
 
 const CurrencySelector = ({ currentCurrency, onCurrencyChange }) => {
-  const { t } = useTranslation('settings');
-
   return (
     <Box
       display="flex"

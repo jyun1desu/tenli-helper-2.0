@@ -9,7 +9,8 @@ const OrderDetail = ({
     cartItems = [],
     gift,
     productData = {},
-    membershipFee = 0,
+    hasMembershipFee = false,
+    defaultMembershipFee = 0,
     total = 0,
     showTotal = false,
     currentCurrency = 'twd',
@@ -67,7 +68,7 @@ const OrderDetail = ({
                 </Grid>
             </Box>
 
-            {membershipFee ? (
+            {hasMembershipFee ? (
                 <Box borderTop="1px solid" borderStyle="dashed" borderColor="border.secondary" mt="2" pt="3">
                     <Grid templateColumns="2fr 1fr" gap="3" px="3">
                         <GridItem display="flex" alignItems="center" gap="3">
@@ -83,7 +84,7 @@ const OrderDetail = ({
                                 letterSpacing="2px"
                                 color="content.tertiary"
                                 textAlign="right"
-                            >{formatNumber(membershipFee, true, currentCurrency)}</Text>
+                            >{formatNumber(defaultMembershipFee, true, currentCurrency)}</Text>
                         </GridItem>
                     </Grid>
                 </Box>

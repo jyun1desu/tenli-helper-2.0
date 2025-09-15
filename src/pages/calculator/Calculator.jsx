@@ -21,7 +21,7 @@ const Calculator = ({
     total = 0,
     points = 0,
     hasPromotion = false,
-    membershipFee = 0,
+    hasMembershipFee = false,
     defaultMembershipFee = 0,
     productData = {},
     giftData = {},
@@ -156,7 +156,7 @@ const Calculator = ({
                             variant="solid"
                             size="lg"
                             alignSelf="flex-end"
-                            checked={!!membershipFee}
+                            checked={hasMembershipFee}
                             onCheckedChange={(e) => onMembershipChange(e.checked)}
                         >
                             <Checkbox.HiddenInput />
@@ -261,7 +261,8 @@ const Calculator = ({
                         productData={productData}
                         cartItems={cartItems}
                         gift={giftData?.gift}
-                        membershipFee={membershipFee}
+                        hasMembershipFee={hasMembershipFee}
+                        defaultMembershipFee={defaultMembershipFee}
                         showTotal={true}
                         total={total}
                         currentCurrency={currentCurrency}

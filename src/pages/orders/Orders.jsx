@@ -21,7 +21,8 @@ const OrderItem = ({
     items = {},
     productData = {},
     promotionData = {},
-    membershipFee = 0,
+    hasMembershipFee = 0,
+    defaultMembershipFee = 0,
     isDetailVisible = false,
     setIsDetailVisible,
     currentCurrency = 'twd',
@@ -38,10 +39,10 @@ const OrderItem = ({
             return {
                 total, points
             }
-        }, { total: membershipFee, points: 0 })
+        }, { total: hasMembershipFee ? defaultMembershipFee : 0, points: 0 })
 
         return { total, points }
-    }, [items, membershipFee, productData]);
+    }, [items, hasMembershipFee, productData, defaultMembershipFee]);
 
     const giftList = useMemo(() => {
         if (!promotionData.gifts) {
@@ -133,7 +134,8 @@ const OrderItem = ({
                         productData={productData}
                         cartItems={items}
                         gift={finalGiftData.gift}
-                        membershipFee={membershipFee}
+                        hasMembershipFee={hasMembershipFee}
+                        defaultMembershipFee={defaultMembershipFee}
                         currentCurrency={currentCurrency}
                     />
                 ) : null
@@ -150,6 +152,7 @@ const Orders = ({
     promotionData = {},
     onCustomerNameChange,
     orderHistoryList = {},
+    defaultMembershipFee = 0,
     currentCurrency = 'twd',
 }) => {
     const { t } = useTranslation('orders');
@@ -162,7 +165,7 @@ const Orders = ({
             <Box flex="1 1 auto" display="flex" flexDirection="column" gap="3" pt="4" px="4" overflow="scroll">
                 {
                     orderItems.map(item => {
-                        const { id, customerName, items, membershipFee, timestamp } = item;
+                        const { id, customerName, items, hasMembershipFee, timestamp } = item;
                         return (
                             <OrderItem
                                 key={id}
@@ -174,7 +177,8 @@ const Orders = ({
                                 onCustomerNameChange={onCustomerNameChange}
                                 customerName={customerName}
                                 importItem={importItem}
-                                membershipFee={membershipFee}
+                                hasMembershipFee={hasMembershipFee}
+                                defaultMembershipFee={defaultMembershipFee}
                                 items={items}
                                 isDetailVisible={showingDetailItemId === id}
                                 setIsDetailVisible={(id) => {

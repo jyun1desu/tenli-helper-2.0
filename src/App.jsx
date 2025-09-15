@@ -82,7 +82,7 @@ function App() {
       id: "",
       customerName: '',
       items: {},
-      membershipFee: 0,
+      hasMembershipFee: false,
     },
   });
 
@@ -102,6 +102,9 @@ function App() {
       ...orderHistoryList,
       [id]: {
         ...values,
+        hasMembershipFee,
+        defaultMembershipFee,
+        currentCurrency,
         id,
         timestamp: Date.now()
       }
@@ -116,7 +119,8 @@ function App() {
     setCurrentPage('home')
   };
 
-  const { items = {}, membershipFee, customerName = '' } = values;
+  const { items = {}, hasMembershipFee, customerName = '' } = values;
+  const membershipFee = hasMembershipFee ? defaultMembershipFee : 0;
 
   const { total, points } = useMemo(() => {
     const { total, points } = Object.entries(items).reduce((acc, cur) => {
@@ -127,7 +131,7 @@ function App() {
       return {
         total, points
       }
-    }, { total: membershipFee, points: 0 })
+    }, { total: membershipFee , points: 0 })
 
     return { total, points }
   }, [items, membershipFee, productData]);
@@ -208,7 +212,7 @@ function App() {
               currentCurrency={currentCurrency}
               setCurrentCurrency={setCurrentCurrency}
               clear={clear}
-              membershipFee={membershipFee}
+              hasMembershipFee={hasMembershipFee}
               cartItems={values.items}
               resetForm={handleReset}
               productData={productData}
@@ -225,7 +229,7 @@ function App() {
                 setFieldValue('customerName', name);
               }}
               onMembershipChange={(isChecked) => {
-                setFieldValue('membershipFee', isChecked ? defaultMembershipFee : 0)
+                setFieldValue('hasMembershipFee', isChecked)
               }}
               onItemQuantityChange={(id, inputQuantity) => {
                 const toSave = {
