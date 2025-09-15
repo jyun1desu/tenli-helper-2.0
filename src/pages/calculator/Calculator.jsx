@@ -26,6 +26,7 @@ const Calculator = ({
     productData = {},
     giftData = {},
     customerName,
+    currentCurrency = 'twd',
     onCustomerNameChange,
     onMembershipChange,
     onItemQuantityChange,
@@ -132,6 +133,7 @@ const Calculator = ({
                     list={displayList}
                     onItemQuantityChange={onItemQuantityChange}
                     cartItems={cartItems}
+                    currentCurrency={currentCurrency}
                 />
             </Box>
             <Box
@@ -161,7 +163,7 @@ const Calculator = ({
                             <Checkbox.Control />
                             <Checkbox.Label textStyle="xl">
                                 <Text as="span" mr="4">{t('membershipFee')}</Text>
-                                <b>{formatNumber(defaultMembershipFee)}</b>
+                                <b>{formatNumber(defaultMembershipFee, true, currentCurrency)}</b>
                             </Checkbox.Label>
                         </Checkbox.Root>
                         <Box display="flex" justifyContent="flex-end" gap="16px" mt="1">
@@ -173,7 +175,7 @@ const Calculator = ({
                             <Text display="flex" alignItems="center" justifyContent="flex-end" flex="0 1 auto" textStyle="xl">
                                 <Icon mr="1" color="icon.primary" size="s" as={ReceiptIcon} />
                                 <Text as="span" mr="3">{t('total')}</Text>
-                                <Text as="span" fontWeight={600}>{` ${formatNumber(total)}`}</Text>
+                                <Text as="span" fontWeight={600}>{` ${formatNumber(total, true, currentCurrency)}`}</Text>
                             </Text>
                         </Box>
                     </Box>
@@ -262,6 +264,7 @@ const Calculator = ({
                         membershipFee={membershipFee}
                         showTotal={true}
                         total={total}
+                        currentCurrency={currentCurrency}
                     />
                 </Box>
             </Modal>

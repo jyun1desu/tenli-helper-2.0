@@ -24,6 +24,7 @@ const OrderItem = ({
     membershipFee = 0,
     isDetailVisible = false,
     setIsDetailVisible,
+    currentCurrency = 'twd',
 }) => {
     const { t, i18n } = useTranslation('orders');
     const [isButtonReconfirming, setIsButtonReconfirming] = useState(false);
@@ -106,7 +107,7 @@ const OrderItem = ({
                 </Box>
             </Box>
             <Box display="flex" mt="3" justifyContent="space-between">
-                <Text textStyle="lg"><b>{formatNumber(total)}</b></Text>
+                <Text textStyle="lg"><b>{formatNumber(total, true, currentCurrency)}</b></Text>
                 <Box
                     as="button"
                     onClick={(e) => {
@@ -133,6 +134,7 @@ const OrderItem = ({
                         cartItems={items}
                         gift={finalGiftData.gift}
                         membershipFee={membershipFee}
+                        currentCurrency={currentCurrency}
                     />
                 ) : null
             }
@@ -148,6 +150,7 @@ const Orders = ({
     promotionData = {},
     onCustomerNameChange,
     orderHistoryList = {},
+    currentCurrency = 'twd',
 }) => {
     const { t } = useTranslation('orders');
     const [isButtonReconfirming, setIsButtonReconfirming] = useState(false);
@@ -177,6 +180,7 @@ const Orders = ({
                                 setIsDetailVisible={(id) => {
                                     setShowingDetailItemId(id);
                                 }}
+                                currentCurrency={currentCurrency}
                             />
                         )
                     })

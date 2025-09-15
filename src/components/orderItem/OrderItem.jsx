@@ -12,6 +12,7 @@ const OrderDetail = ({
     membershipFee = 0,
     total = 0,
     showTotal = false,
+    currentCurrency = 'twd',
 }) => {
     const { t, i18n } = useTranslation('orderItem');
 
@@ -82,7 +83,7 @@ const OrderDetail = ({
                                 letterSpacing="2px"
                                 color="content.tertiary"
                                 textAlign="right"
-                            >{formatNumber(membershipFee, true)}</Text>
+                            >{formatNumber(membershipFee, true, currentCurrency)}</Text>
                         </GridItem>
                     </Grid>
                 </Box>
@@ -98,7 +99,7 @@ const OrderDetail = ({
                         </GridItem>
                         <GridItem>
                             <Text textStyle="xl" fontWeight={600} letterSpacing="2px" color="content.primary" textAlign="right">
-                                {formatNumber(total, true)}
+                                {formatNumber(total, true, currentCurrency)}
                             </Text>
                         </GridItem>
                     </Grid>

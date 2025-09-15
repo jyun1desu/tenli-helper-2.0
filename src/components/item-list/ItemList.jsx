@@ -17,7 +17,8 @@ const Item = ({
     onItemQuantityChange,
     layout,
     price,
-    pv
+    pv,
+    currentCurrency = 'twd'
 }) => {
     const seriesLabel = useMemo(() => {
         return seriesNumber.split('').join(`\n`);
@@ -41,7 +42,7 @@ const Item = ({
                             px="2px"
                             fontWeight={600}
                             color="content.secondary"
-                        >{formatNumber(price)}</Text>
+                        >{formatNumber(price, true, currentCurrency)}</Text>
                         <Text
                             as="span"
                             textStyle="md"
@@ -95,7 +96,7 @@ const Item = ({
                         px="2px"
                         fontWeight={600}
                         color="content.secondary"
-                    >{formatNumber(price)}</Text>
+                    >{formatNumber(price, true, currentCurrency)}</Text>
                     <Text
                         as="span"
                         textStyle="md"
@@ -112,7 +113,7 @@ const Item = ({
     )
 };
 
-const ItemList = ({ layout, onItemQuantityChange, list, cartItems = {} }) => {
+const ItemList = ({ layout, onItemQuantityChange, list, cartItems = {}, currentCurrency = 'twd' }) => {
     return (
         <Box
             display={layout === LAYOUT.LIST ? "flex" : "grid"}
@@ -144,6 +145,7 @@ const ItemList = ({ layout, onItemQuantityChange, list, cartItems = {} }) => {
                             price={price}
                             pv={pv}
                             id={id}
+                            currentCurrency={currentCurrency}
                         />
                     )
                 })

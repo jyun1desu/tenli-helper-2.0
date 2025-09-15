@@ -17,6 +17,7 @@ const GiftItem = ({
     progressPercentage,
     pointsNeeded,
     isCurrentGift,
+    currentCurrency = 'twd',
 }) => {
     const { t } = useTranslation('gift');
 
@@ -45,7 +46,7 @@ const GiftItem = ({
                 </Text>
                 <Text color="content.secondary" display="flex" alignItems="center" gap="1" ml="4">
                     <Icon color="icon.secondary" as={MoneyIcon} />
-                    <Text as="span">{t('value')} <b>{formatNumber(value, true)}</b></Text>
+                    <Text as="span">{t('value')} <b>{formatNumber(value, true, currentCurrency)}</b></Text>
                 </Text>
             </Box>
             {isCurrentGift ?
@@ -91,6 +92,7 @@ const GiftItem = ({
 const Gift = ({
     currentPV = 0,
     promotionData = {},
+    currentCurrency = 'twd',
 }) => {
 
     const { t } = useTranslation('gift');
@@ -137,6 +139,7 @@ const Gift = ({
                                     isCurrentGift={isCurrentGift}
                                     progressPercentage={progressPercentage}
                                     pointsNeeded={pointsNeeded}
+                                    currentCurrency={currentCurrency}
                                     {...gift}
                                 />
                             )
@@ -157,7 +160,7 @@ const Gift = ({
                                     const pointsNeeded = Math.max(pvCost - currentPV, 0);
                                     const progressPercentage = Math.min(1, (currentPV / pvCost).toFixed(2));
                                     return (
-                                        <GiftItem key={id} progressPercentage={progressPercentage} pointsNeeded={pointsNeeded} {...gift} />
+                                        <GiftItem key={id} progressPercentage={progressPercentage} pointsNeeded={pointsNeeded} currentCurrency={currentCurrency} {...gift} />
                                     )
                                 })
                             }

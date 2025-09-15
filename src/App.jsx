@@ -16,16 +16,19 @@ import Settings from './pages/settings/Settings';
 import { db } from './firebase';
 import DotLoading from './components/dot-loading/DotLoading';
 
-const Content = ({ currentPage, total, points, ...props }) => {
+const Content = ({ currentPage, total, points, setCurrentCurrency, ...props }) => {
   switch (currentPage) {
     case 'gift':
-      return <Gift currentPV={points} {...props} />;
+      return <Gift {...props} currentPV={points} />;
     case 'orders':
       return <Orders {...props} />;
     case 'join':
       return <JoinForm {...props} />
     case 'setting':
-      return <Settings />;
+      return <Settings
+        onCurrencyChange={setCurrentCurrency}
+        {...props}
+      />;
     case 'home':
     default:
       return <Calculator total={total} points={points} {...props} />;
@@ -38,7 +41,9 @@ function App() {
 
   const [currentPage, setCurrentPage] = useState('home');
   const [orderHistoryList, setOrderHistoryList] = useLocalStorage("orders", {});
+  const [currentCurrency, setCurrentCurrency] = useLocalStorage("currency", "twd");
   const [rawProductData, setProductData] = useState({});
+  const [rawMembershipFeeData, setRawMembershipFeeData] = useState({});
   const productData = useMemo(() => {
     const result = {};
     const isEn = currentLanguage.includes('en');
@@ -49,6 +54,7 @@ function App() {
       result[d.id] = {
         ...d,
         name: isEn ? enName : name,
+        price: currentCurrency === 'myr' ? myPrice : price,
         priceData: priceData || {
           twd: price,
           myr: myPrice,
@@ -57,9 +63,19 @@ function App() {
     })
 
     return result;
-  }, [rawProductData, currentLanguage]);
+  }, [rawProductData, currentLanguage, currentCurrency]);
+
+  const defaultMembershipFee = useMemo(() => {
+    const { price, myPrice } = rawMembershipFeeData;
+    const data = {
+      twd: price || 1000,
+      myr: myPrice
+    }
+
+    return data[currentCurrency];
+  }, [rawMembershipFeeData, currentCurrency]);
+
   const [promotionData, setPromotionData] = useState({});
-  const [defaultMembershipFee, setMembershipFee] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const { values = {}, setFieldValue, handleReset, setValues } = useFormik({
     initialValues: {
@@ -158,8 +174,8 @@ function App() {
         const fetchMembershipFee = async () => {
           const querySnapshot = await getDocs(collection(db, 'MembershipFee'));
           const list = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-          const fee = list?.[0]?.value || 0;
-          setMembershipFee(fee);
+          const feeData = list?.[0] || {};
+          setRawMembershipFeeData(feeData);
         };
 
         await Promise.all([
@@ -189,6 +205,8 @@ function App() {
               currentPage={currentPage}
               total={total}
               points={points}
+              currentCurrency={currentCurrency}
+              setCurrentCurrency={setCurrentCurrency}
               clear={clear}
               membershipFee={membershipFee}
               cartItems={values.items}
