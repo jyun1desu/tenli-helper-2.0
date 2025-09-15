@@ -3,6 +3,7 @@ import { Box } from '@chakra-ui/react';
 import { collection, getDocs } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import { useFormik } from 'formik';
+import { useTranslation } from 'react-i18next';
 import Navigator from '@/components/navigator/Navigator.jsx';
 import Header from '@/components/header/Header.jsx';
 import Calculator from '@/pages/calculator/Calculator.jsx'
@@ -32,9 +33,31 @@ const Content = ({ currentPage, total, points, ...props }) => {
 }
 
 function App() {
+  const { i18n } = useTranslation();
+  const currentLanguage = i18n.language;
+
   const [currentPage, setCurrentPage] = useState('home');
   const [orderHistoryList, setOrderHistoryList] = useLocalStorage("orders", {});
-  const [productData, setProductData] = useState({});
+  const [rawProductData, setProductData] = useState({});
+  const productData = useMemo(() => {
+    const result = {};
+    const isEn = currentLanguage.includes('en');
+
+    Object.values(rawProductData).forEach(d => {
+      const { name, enName, priceData, price, myPrice } = d;
+
+      result[d.id] = {
+        ...d,
+        name: isEn ? enName : name,
+        priceData: priceData || {
+          twd: price,
+          myr: myPrice,
+        },
+      };
+    })
+
+    return result;
+  }, [rawProductData, currentLanguage]);
   const [promotionData, setPromotionData] = useState({});
   const [defaultMembershipFee, setMembershipFee] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
